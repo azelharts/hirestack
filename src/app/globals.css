@@ -10,12 +10,115 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* === Neutral Colors === */
+  --color-neutral-10: #ffffff;
+  --color-neutral-20: #fafafa;
+  --color-neutral-30: #ededed;
+  --color-neutral-40: #e0e0e0;
+  --color-neutral-50: #c2c2c2;
+  --color-neutral-60: #9e9e9e;
+  --color-neutral-70: #757575;
+  --color-neutral-80: #616161;
+  --color-neutral-90: #404040;
+  --color-neutral-100: #1d1f20;
+
+  /* === Primary Colors === */
+  --color-primary-main: #01959f;
+  --color-primary-surface: #f3fbfc;
+  --color-primary-border: #4db5bc;
+  --color-primary-hover: #01777f;
+  --color-primary-pressed: #01595f;
+  --color-primary-focus: color-mix(in srgb, #01959f 20%, transparent);
+
+  /* === Secondary Colors === */
+  --color-secondary-main: #fbc037;
+  --color-secondary-surface: #fffcf5;
+  --color-secondary-border: #feeabc;
+  --color-secondary-hover: #f8a92f;
+  --color-secondary-pressed: #fa9810;
+  --color-secondary-focus: color-mix(in srgb, #fbc037 20%, transparent);
+
+  /* === Semantic Colors: Danger === */
+  --color-danger-main: #e01428;
+  --color-danger-surface: #fff9fa;
+  --color-danger-border: #f5b1b7;
+  --color-danger-hover: #bc1121;
+  --color-danger-pressed: #700a14;
+  --color-danger-focus: color-mix(in srgb, #e01428 20%, transparent);
+
+  /* === Semantic Colors: Warning === */
+  --color-warning-main: #ca7336;
+  --color-warning-surface: #fcf7f3;
+  --color-warning-border: #feb17b;
+  --color-warning-hover: #b1652f;
+  --color-warning-pressed: #985628;
+  --color-warning-focus: color-mix(in srgb, #ca7336 20%, transparent);
+
+  /* === Semantic Colors: Success */
+  --color-success-main: #43936c;
+  --color-success-surface: #f7f7f7;
+  --color-success-border: #b8dbca;
+  --color-success-hover: #367a59;
+  --color-success-pressed: #20573d;
+  --color-success-focus: color-mix(in srgb, #731912 20%, transparent);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  /* === Text === */
+  .text-xs {
+    @apply text-[10px] leading-[16px] font-normal;
+  }
+  .text-xs-bold {
+    @apply text-[10px] leading-[16px] font-bold;
+  }
+
+  .text-s {
+    @apply text-[12px] leading-[20px] font-normal;
+  }
+  .text-s-bold {
+    @apply text-[12px] leading-[20px] font-bold;
+  }
+
+  .text-m {
+    @apply text-[14px] leading-[24px] font-normal;
+  }
+  .text-m-bold {
+    @apply text-[14px] leading-[24px] font-bold;
+  }
+
+  .text-l {
+    @apply text-[16px] leading-[28px] font-normal;
+  }
+  .text-l-bold {
+    @apply text-[16px] leading-[28px] font-bold;
+  }
+
+  /* === Headings === */
+  .heading-s {
+    @apply text-[20px] leading-[32px] font-normal;
+  }
+  .heading-s-bold {
+    @apply text-[20px] leading-[32px] font-bold;
+  }
+
+  .heading-m {
+    @apply text-[24px] leading-[36px] font-normal;
+  }
+  .heading-m-bold {
+    @apply text-[24px] leading-[36px] font-bold;
+  }
+
+  .heading-l {
+    @apply text-[32px] leading-[44px] font-normal;
+  }
+  .heading-l-bold {
+    @apply text-[32px] leading-[44px] font-bold;
+  }
+
+  /* === Display === */
+  .display-bold {
+    @apply text-[48px] leading-[64px] font-bold;
   }
 }
 
