@@ -4,7 +4,12 @@
 import { forwardRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { CheckIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import {
+  CheckIcon,
+  ExclamationTriangleIcon,
+  EyeIcon,
+  EyeSlashIcon,
+} from "@heroicons/react/24/outline";
 
 const inputVariants = cva(
   "flex items-center rounded-lg border-2 px-4 py-2 h-10 text-m bg-neutral-10 text-neutral-90 focus-within:border-primary-main",
@@ -15,6 +20,7 @@ const inputVariants = cva(
           "border-neutral-40 hover:not-focus-within:border-primary-focus",
         error: "border-danger-main",
         success: "border-primary-main",
+        disabled: "!border-neutral-30 !text-neutral-60 !cursor-not-allowed",
       },
     },
     defaultVariants: {
@@ -81,9 +87,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
               tabIndex={-1}
             >
               {showPassword ? (
-                <EyeSlashIcon className="w-4 h-4 text-neutral-100 stroke-2" />
-              ) : (
                 <EyeIcon className="w-4 h-4 text-neutral-100 stroke-2" />
+              ) : (
+                <EyeSlashIcon className="w-4 h-4 text-neutral-100 stroke-2" />
               )}
             </button>
           )}
@@ -92,6 +98,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         {/* Messages */}
         {errorMessage && (
           <div className="flex items-center gap-x-1 text-s text-danger-main">
+            <ExclamationTriangleIcon className="w-4 h-4 stroke-2" />
             <span>{errorMessage}</span>
           </div>
         )}

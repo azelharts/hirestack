@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,9 +16,26 @@ import { loginWithoutPassword } from "../action";
 
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
+import { Tag } from "@/components/ui/tag";
+
 import { KeyIcon } from "@heroicons/react/24/outline";
 
 const LogInForm = () => {
+  const searchParams = useSearchParams();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+
+    if (errorParam === "expired") {
+      setErrorMessage(
+        "Tautan konfirmasi sudah kedaluwarsa. Silakan daftar ulang atau minta tautan baru."
+      );
+    } else if (errorParam === "invalid_link") {
+      setErrorMessage("Tautan tidak valid.");
+    }
+  }, [searchParams]);
+
   const {
     register,
     handleSubmit,
@@ -64,6 +84,14 @@ const LogInForm = () => {
               </Link>
             </p>
           </div>
+
+          {/* TODO: turn into tags component */}
+          {errorMessage && (
+            <Tag variant="danger" size="small">
+              Link <span className="text-s-bold">sudah kadaluarsa.</span>{" "}
+              Silahkan login kembali!
+            </Tag>
+          )}
 
           <TextField
             label="Alamat email"

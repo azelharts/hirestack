@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,8 +13,15 @@ import { signup } from "../action";
 
 import { TextField } from "@/components/ui/text-field";
 import { Button } from "@/components/ui/button";
+import { Tag } from "@/components/ui/tag";
 
 const SignUpForm = () => {
+  const router = useRouter();
+
+  const [error, setError] = useState<string | null>(null);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -26,10 +36,28 @@ const SignUpForm = () => {
   const passwordValue = watch("password") || "";
 
   const onSubmit = async (data: authFormValues) => {
+    setLoading(true);
+
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
-    await signup(formData);
+
+    const result = await signup(formData);
+
+    if (result.error) {
+      setError(result.error as string);
+      setLoading(false);
+      return;
+    }
+
+    setEmailVerified(true);
+    setLoading(false);
+
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    router.push(
+      `/confirm?email=${encodeURIComponent(result.data?.user?.email || "")}`
+    );
   };
 
   return (
@@ -60,15 +88,34 @@ const SignUpForm = () => {
             </p>
           </div>
 
+          {/* TODO: turn into tags component */}
+          {error && !emailVerified && (
+            <Tag variant="danger" size="small">
+              {error}{" "}
+              <Link href="/login" className="text-s-bold hover:underline">
+                Masuk
+              </Link>
+            </Tag>
+          )}
+
           <TextField
             label="Alamat email"
             type="email"
             placeholder="Masukan email"
+            disabled={loading}
             {...register("email")}
-            state={errors.email ? "error" : emailValue ? "success" : "default"}
+            state={
+              errors.password
+                ? "error"
+                : loading
+                ? "disabled"
+                : passwordValue
+                ? "success"
+                : "default"
+            }
             errorMessage={errors.email?.message}
             successMessage={
-              !errors.email && emailValue
+              emailVerified && emailValue
                 ? "Alamat email teridentifikasi"
                 : undefined
             }
@@ -77,15 +124,29 @@ const SignUpForm = () => {
           <TextField
             label="Kata sandi"
             type="password"
+            disabled={loading}
             placeholder="Masukan kata sandi"
             {...register("password")}
             state={
-              errors.password ? "error" : passwordValue ? "success" : "default"
+              errors.password
+                ? "error"
+                : loading
+                ? "disabled"
+                : passwordValue
+                ? "success"
+                : "default"
             }
             errorMessage={errors.password?.message}
           />
 
-          <Button variant="secondary" size="large" shadow type="submit">
+          <Button
+            disabled={loading}
+            variant={loading ? "disabled" : "secondary"}
+            border={loading}
+            size="large"
+            shadow
+            type="submit"
+          >
             Daftar dengan email
           </Button>
 
@@ -96,7 +157,8 @@ const SignUpForm = () => {
           </div>
 
           <Button
-            variant="neutral"
+            disabled={loading}
+            variant={loading ? "disabled" : "neutral"}
             size="large"
             border
             type="button"

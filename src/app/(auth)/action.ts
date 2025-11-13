@@ -10,20 +10,25 @@ export async function signup(formData: FormData) {
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
-  const { error } = await supabase.auth.signUp(data);
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  });
 
-  console.log(error);
-  if (error) {
-    redirect("/error");
+  // if user exist but is fake. The identities array is empty only for a confirmed user. If a user has registered but not yet confirmed, then you still get a non empty identities array in response and in which case you would have overridden the password of the non confirmed user now.
+  if (error || data?.user?.identities?.length === 0) {
+    return {
+      error: "Email ini sudah terdaftar sebagai akun di Rakamin Academy.",
+    };
   }
 
-  revalidatePath("/", "layout");
-  redirect(`/confirm?email=${encodeURIComponent(data.email)}`);
+  // revalidatePath("/", "layout");
+  // redirect(`/confirm?email=${encodeURIComponent(email)}`);
+
+  return { data: data };
 }
 
 export async function login(formData: FormData) {

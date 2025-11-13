@@ -11,6 +11,7 @@ const buttonVariants = cva(
         primary: "bg-primary-main hover:bg-primary-hover text-neutral-10",
         secondary: "bg-secondary-main hover:bg-secondary-hover text-neutral-90",
         neutral: "bg-neutral-10 text-neutral-100",
+        disabled: "bg-neutral-30 !text-neutral-60 !cursor-not-allowed",
       },
       size: {
         small: "py-1 px-4 text-s-bold",
