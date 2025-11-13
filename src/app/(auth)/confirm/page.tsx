@@ -1,9 +1,9 @@
-import LogInForm from "./login-form";
+import ConfirmEmail from "./confirm-email";
 
 const page = () => {
   return (
     <div className="w-screen h-svh flex items-center justify-center">
-      <LogInForm withPassword={false} />
+      <ConfirmEmail />
     </div>
   );
 };

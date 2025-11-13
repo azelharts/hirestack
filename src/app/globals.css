@@ -71,58 +71,58 @@
 @layer components {
   /* === Text === */
   .text-xs {
-    @apply text-[10px] leading-[16px] font-normal;
+    @apply text-[10px] leading-4 font-normal;
   }
   .text-xs-bold {
-    @apply text-[10px] leading-[16px] font-bold;
+    @apply text-[10px] leading-4 font-bold;
   }
 
   .text-s {
-    @apply text-[12px] leading-[20px] font-normal;
+    @apply text-[12px] leading-5 font-normal;
   }
   .text-s-bold {
-    @apply text-[12px] leading-[20px] font-bold;
+    @apply text-[12px] leading-5 font-bold;
   }
 
   .text-m {
-    @apply text-[14px] leading-[24px] font-normal;
+    @apply text-[14px] leading-6 font-normal;
   }
   .text-m-bold {
-    @apply text-[14px] leading-[24px] font-bold;
+    @apply text-[14px] leading-6 font-bold;
   }
 
   .text-l {
-    @apply text-[16px] leading-[28px] font-normal;
+    @apply text-[16px] leading-7 font-normal;
   }
   .text-l-bold {
-    @apply text-[16px] leading-[28px] font-bold;
+    @apply text-[16px] leading-7 font-bold;
   }
 
   /* === Headings === */
   .heading-s {
-    @apply text-[20px] leading-[32px] font-normal;
+    @apply text-[20px] leading-8 font-normal;
   }
   .heading-s-bold {
-    @apply text-[20px] leading-[32px] font-bold;
+    @apply text-[20px] leading-8 font-bold;
   }
 
   .heading-m {
-    @apply text-[24px] leading-[36px] font-normal;
+    @apply text-[24px] leading-9 font-normal;
   }
   .heading-m-bold {
-    @apply text-[24px] leading-[36px] font-bold;
+    @apply text-[24px] leading-9 font-bold;
   }
 
   .heading-l {
-    @apply text-[32px] leading-[44px] font-normal;
+    @apply text-[32px] leading-11 font-normal;
   }
   .heading-l-bold {
-    @apply text-[32px] leading-[44px] font-bold;
+    @apply text-[32px] leading-11 font-bold;
   }
 
   /* === Display === */
   .display-bold {
-    @apply text-[48px] leading-[64px] font-bold;
+    @apply text-[48px] leading-16 font-bold;
   }
 }
 
