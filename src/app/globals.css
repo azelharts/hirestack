@@ -8,8 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-nunito-sans);
 
   /* === Neutral Colors === */
   --color-neutral-10: #ffffff;
@@ -62,6 +61,11 @@
   --color-success-hover: #367a59;
   --color-success-pressed: #20573d;
   --color-success-focus: color-mix(in srgb, #731912 20%, transparent);
+
+  /* === Custom Shadows === */
+  --shadow-input: inset 1px 2px 2px 0px rgba(0, 0, 0, 0.12);
+  --shadow-button: 0px 1px 2px 0px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0px 4px 8px 0px rgba(0, 0, 0, 0.1);
 }
 
 @layer components {
@@ -126,4 +130,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  cursor: pointer;
 }

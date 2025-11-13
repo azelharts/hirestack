@@ -1,4 +1,5 @@
-import { login, signup } from "./action";
+import { login } from "./action";
+import { signup } from "../register/action";
 
 export default function LoginPage() {
   return (
