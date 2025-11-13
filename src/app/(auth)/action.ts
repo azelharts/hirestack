@@ -45,3 +45,30 @@ export async function login(formData: FormData) {
   revalidatePath("/", "layout");
   redirect("/account");
 }
+
+export async function loginWithoutPassword(formData: FormData) {
+  const supabase = await createClient();
+  const email = formData.get("email") as string;
+
+  if (!email) {
+    throw new Error("Email is required");
+  }
+
+  const { data, error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: false,
+      emailRedirectTo:
+        `${process.env.NEXT_PUBLIC_SITE_URL}/account` ||
+        "http://localhost:3000",
+    },
+  });
+
+  if (error) {
+    console.error("Supabase signInWithOtp error:", error.message);
+    redirect("/error");
+  }
+
+  revalidatePath("/", "layout");
+  redirect(`/confirm?email=${encodeURIComponent(email)}`);
+}

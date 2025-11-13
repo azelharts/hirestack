@@ -3,13 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  passwordlessAuthFormValues,
-  passwordlessAuthSchema,
-} from "@/lib/validations/auth";
+import { authFormValues, authSchema } from "@/lib/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginWithoutPassword } from "../action";
+import { login } from "../../action";
 
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
@@ -21,17 +18,20 @@ const LogInForm = () => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<passwordlessAuthFormValues>({
-    resolver: zodResolver(passwordlessAuthSchema),
+  } = useForm<authFormValues>({
+    resolver: zodResolver(authSchema),
     mode: "onChange",
   });
 
   const emailValue = watch("email") || "";
+  const passwordValue = watch("password") || "";
 
-  const onSubmit = async (data: passwordlessAuthFormValues) => {
+  const onSubmit = async (data: authFormValues) => {
     const formData = new FormData();
+
     formData.append("email", data.email);
-    await loginWithoutPassword(formData);
+    formData.append("password", data.password);
+    await login(formData);
   };
 
   return (
@@ -79,8 +79,19 @@ const LogInForm = () => {
             }
           />
 
+          <TextField
+            label="Kata sandi"
+            type="password"
+            placeholder="Masukan kata sandi"
+            {...register("password")}
+            state={
+              errors.password ? "error" : passwordValue ? "success" : "default"
+            }
+            errorMessage={errors.password?.message}
+          />
+
           <Button variant="secondary" size="large" shadow type="submit">
-            Kirim link
+            "Masuk"
           </Button>
 
           <div className="flex items-center gap-x-3">
@@ -89,7 +100,7 @@ const LogInForm = () => {
             <div className="h-px bg-neutral-60 grow" />
           </div>
 
-          <Link href="/login/password">
+          <Link href="/login">
             <Button
               variant="neutral"
               size="large"
@@ -98,7 +109,7 @@ const LogInForm = () => {
               className="gap-x-2.5 text-sm"
             >
               <KeyIcon width={16} height={16} color="#111827" />
-              "Masuk dengan kata sandi"
+              "Kirim link login melalui email"
             </Button>
           </Link>
 
