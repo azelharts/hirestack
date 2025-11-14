@@ -98,6 +98,14 @@
     @apply text-[16px] leading-7 font-bold;
   }
 
+  .text-xl {
+    @apply text-[18px] leading-7 font-normal;
+  }
+
+  .text-xl-bold {
+    @apply text-[18px] leading-7 font-bold;
+  }
+
   /* === Headings === */
   .heading-s {
     @apply text-[20px] leading-8 font-normal;
@@ -123,6 +131,10 @@
   /* === Display === */
   .display-bold {
     @apply text-[48px] leading-16 font-bold;
+  }
+
+  .max-w-container {
+    @apply max-w-[1440px] w-full mx-auto;
   }
 }
 

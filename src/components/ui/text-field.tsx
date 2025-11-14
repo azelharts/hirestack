@@ -73,12 +73,21 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         )}
 
         <div className={cn(inputVariants({ state }), className)}>
+          {leftIcon && (
+            <span className="absolute left-3 text-neutral-60">{leftIcon}</span>
+          )}
           <input
             ref={ref}
             type={inputType}
             className="flex-1 outline-none placeholder:text-neutral-60 text-m text-neutral-90"
             {...props}
           />
+          {rightIcon && (
+            <span className="absolute right-3 text-neutral-60">
+              {rightIcon}
+            </span>
+          )}
+
           {/* Toggle Visibilty */}
           {isPassword && (
             <button

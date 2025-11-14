@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
+
 import "./globals.css";
+
+import { ReactQueryClientProvider } from "@/components/react-query-client-provider";
 
 const nunitoSans = Nunito_Sans({
   variable: "--font-nunito-sans",
@@ -18,10 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${nunitoSans.className} antialiased bg-neutral-20`}>
-        {children}
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en">
+        <body className={`${nunitoSans.className} antialiased bg-neutral-20`}>
+          {children}
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }
