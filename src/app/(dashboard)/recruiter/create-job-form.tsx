@@ -1,4 +1,7 @@
 "use client";
+import { useState } from "react";
+
+import { useRouter } from "next/navigation";
 
 import { jobOpeningSchema } from "@/lib/validations/job";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +20,6 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -36,6 +38,9 @@ import { jobTypes, profileFields } from "@/lib/constant";
 import { Button } from "@/components/button";
 
 const CreateJobForm = () => {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<z.infer<typeof jobOpeningSchema>>({
     // @ts-expect-error
     resolver: zodResolver(jobOpeningSchema),
@@ -43,6 +48,8 @@ const CreateJobForm = () => {
       jobName: "",
       jobType: "",
       jobDescription: "",
+      department: "",
+      companyName: "",
       numberOfCandidatesNeeded: 1,
       jobSalary: {
         // @ts-expect-error
@@ -60,13 +67,49 @@ const CreateJobForm = () => {
         linkedInLink: "Mandatory",
         dateOfBirth: "Mandatory",
       },
+      status: "draft",
     },
     mode: "onChange",
     reValidateMode: "onChange",
   });
 
-  const onSubmit = (data: z.infer<typeof jobOpeningSchema>) => {
+  const onSubmit = async (
+    data: z.infer<typeof jobOpeningSchema>,
+    status: "draft" | "active"
+  ) => {
+    setIsSubmitting(true);
     console.log(JSON.stringify(data, null, 2));
+
+    try {
+      const response = await fetch("/api/jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, status }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create job");
+      }
+
+      const result = await response.json();
+
+      toast.success(
+        status === "draft"
+          ? "Job saved as draft"
+          : "Job published successfully!"
+      );
+
+      form.reset();
+      router.refresh();
+    } catch (error) {
+      console.error("Error creating job:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create job"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -159,6 +202,34 @@ const CreateJobForm = () => {
               </Field>
             )}
           />
+
+          {/* Department & Company Name */}
+          <div className="grid grid-cols-2 gap-4">
+            <Controller
+              name="department"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field className="flex flex-col gap-y-2">
+                  <FieldLabel htmlFor="department">Department</FieldLabel>
+                  <Input
+                    {...field}
+                    id="department"
+                    placeholder="Ex. Engineering"
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              name="companyName"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field className="flex flex-col gap-y-2">
+                  <FieldLabel htmlFor="company">Company Name</FieldLabel>
+                  <Input {...field} id="company" placeholder="Ex. Videfly" />
+                </Field>
+              )}
+            />
+          </div>
 
           {/* Job Description */}
           <Controller
@@ -355,13 +426,25 @@ const CreateJobForm = () => {
         <div
           // @ts-expect-error
           onSubmit={form.handleSubmit(onSubmit)}
-          className="sticky z-50 bottom-0 left-0 w-full flex justify-end p-6 border-t gap-y-2 bg-neutral-10 border-neutral-40"
+          className="sticky z-50 bottom-0 left-0 w-full flex justify-end p-6 border-t gap-y-2 gap-x-2 bg-neutral-10 border-neutral-40"
         >
           <Button
+            type="button"
+            disabled={!form.formState.isValid || form.formState.isSubmitting}
+            variant={form.formState.isValid ? "neutral" : "disabled"}
+            size="medium"
+            className="w-fit!"
+            onClick={form.handleSubmit((data) => onSubmit(data, "draft"))}
+          >
+            Save as Draft
+          </Button>
+          <Button
+            type="button"
             disabled={!form.formState.isValid || form.formState.isSubmitting}
             variant={form.formState.isValid ? "primary" : "disabled"}
             size="medium"
             className="w-fit!"
+            onClick={form.handleSubmit((data) => onSubmit(data, "active"))}
           >
             Publish Job
           </Button>

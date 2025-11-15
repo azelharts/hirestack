@@ -1,0 +1,336 @@
+// lib/queries/jobs.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { createClient } from '@/utils/supabase/client';
+import { Database } from '@/utils/supabase/database.types';
+
+import { toast } from 'sonner';
+
+type Job = Database['public']['Tables']['jobs']['Row'];
+type JobInsert = Database['public']['Tables']['jobs']['Insert'];
+type JobUpdate = Database['public']['Tables']['jobs']['Update'];
+
+// Query Keys
+export const jobKeys = {
+  all: ['jobs'] as const,
+  lists: () => [...jobKeys.all, 'list'] as const,
+  list: (filters: string) => [...jobKeys.lists(), { filters }] as const,
+  details: () => [...jobKeys.all, 'detail'] as const,
+  detail: (id: string) => [...jobKeys.details(), id] as const,
+  applications: (jobId: string) => [...jobKeys.all, 'applications', jobId] as const,
+};
+
+// ============================================
+// FETCH ALL JOBS (with optional filters)
+// ============================================
+export function useJobs(params?: {
+  status?: string;
+  search?: string;
+  myJobs?: boolean;
+}) {
+  const supabase = createClient();
+
+  return useQuery({
+    queryKey: jobKeys.list(JSON.stringify(params || {})),
+    queryFn: async () => {
+      let query = supabase
+        .from('jobs')
+        .select(`
+          *,
+          recruiter:profiles!recruiter_id(full_name, avatar_url, company_name),
+          application_count:job_applications(count)
+        `)
+        .order('created_at', { ascending: false });
+
+      // Apply filters
+      if (params?.myJobs) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          query = query.eq('recruiter_id', user.id);
+        }
+      } else {
+        // Public view: only show active jobs
+        query = query.eq('status', 'active');
+      }
+
+      if (params?.status && params?.myJobs) {
+        query = query.eq('status', params.status as "draft" | "active" | "inactive");
+      }
+
+      if (params?.search) {
+        query = query.or(`job_name.ilike.%${params.search}%,job_description.ilike.%${params.search}%`);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+      return data as Job[];
+    },
+  });
+}
+
+// ============================================
+// FETCH SINGLE JOB
+// ============================================
+export function useJob(jobId: string) {
+  const supabase = createClient();
+
+  return useQuery({
+    queryKey: jobKeys.detail(jobId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select(`
+          *,
+          recruiter:profiles!recruiter_id(full_name, avatar_url, company_name)
+        `)
+        .eq('id', jobId)
+        .single();
+
+      if (error) throw error;
+      return data as Job;
+    },
+    enabled: !!jobId,
+  });
+}
+
+// ============================================
+// CREATE JOB MUTATION
+// ============================================
+export function useCreateJob() {
+  const queryClient = useQueryClient();
+  const supabase = createClient();
+
+  return useMutation({
+    mutationFn: async (jobData: {
+      jobName: string;
+      jobType: string;
+      jobDescription: string;
+      department?: string;
+      companyName?: string;
+      numberOfCandidatesNeeded: number;
+      jobSalary: { minimum: number; maximum: number };
+      minimumProfileInformation: any;
+      status: 'draft' | 'active' | 'inactive';
+    }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      const { data, error } = await supabase
+        .from('jobs')
+        .insert({
+          recruiter_id: user.id,
+          job_name: jobData.jobName,
+          job_type: jobData.jobType,
+          job_description: jobData.jobDescription,
+          department: jobData.department,
+          company_name: jobData.companyName,
+          number_of_candidates_needed: jobData.numberOfCandidatesNeeded,
+          salary_min: jobData.jobSalary.minimum,
+          salary_max: jobData.jobSalary.maximum,
+          status: jobData.status || 'draft',
+          req_full_name: jobData.minimumProfileInformation.fullName,
+          req_photo_profile: jobData.minimumProfileInformation.photoProfile,
+          req_gender: jobData.minimumProfileInformation.gender,
+          req_domicile: jobData.minimumProfileInformation.domicile,
+          req_email: jobData.minimumProfileInformation.email,
+          req_phone_number: jobData.minimumProfileInformation.phoneNumber,
+          req_linkedin_link: jobData.minimumProfileInformation.linkedInLink,
+          req_date_of_birth: jobData.minimumProfileInformation.dateOfBirth,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: jobKeys.lists() });
+      toast.success('Job created successfully!');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to create job');
+    },
+  });
+}
+
+// ============================================
+// UPDATE JOB MUTATION
+// ============================================
+export function useUpdateJob(jobId: string) {
+  const queryClient = useQueryClient();
+  const supabase = createClient();
+
+  return useMutation({
+    mutationFn: async (updates: Partial<JobUpdate>) => {
+      const { data, error } = await supabase
+        .from('jobs')
+        .update(updates)
+        .eq('id', jobId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: jobKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: jobKeys.detail(jobId) });
+      toast.success('Job updated successfully!');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to update job');
+    },
+  });
+}
+
+// ============================================
+// DELETE JOB MUTATION
+// ============================================
+export function useDeleteJob() {
+  const queryClient = useQueryClient();
+  const supabase = createClient();
+
+  return useMutation({
+    mutationFn: async (jobId: string) => {
+      const { error } = await supabase
+        .from('jobs')
+        .delete()
+        .eq('id', jobId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: jobKeys.lists() });
+      toast.success('Job deleted successfully!');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to delete job');
+    },
+  });
+}
+
+// ============================================
+// FETCH JOB APPLICATIONS
+// ============================================
+export function useJobApplications(jobId: string) {
+  const supabase = createClient();
+
+  return useQuery({
+    queryKey: jobKeys.applications(jobId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('job_applications')
+        .select(`
+          *,
+          applicant:profiles!applicant_id(id, username, avatar_url)
+        `)
+        .eq('job_id', jobId)
+        .order('applied_at', { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!jobId,
+  });
+}
+
+// ============================================
+// SUBMIT APPLICATION MUTATION
+// ============================================
+export function useSubmitApplication() {
+  const queryClient = useQueryClient();
+  const supabase = createClient();
+
+  return useMutation({
+    mutationFn: async (applicationData: {
+      jobId: string;
+      fullName?: string;
+      photoUrl?: string;
+      gender?: string;
+      domicile?: string;
+      email?: string;
+      phoneNumber?: string;
+      linkedinUrl?: string;
+      dateOfBirth?: string;
+    }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // Check if already applied
+      const { data: existingApp } = await supabase
+        .from('job_applications')
+        .select('id')
+        .eq('job_id', applicationData.jobId)
+        .eq('applicant_id', user.id)
+        .single();
+
+      if (existingApp) {
+        throw new Error('You have already applied to this job');
+      }
+
+      const { data, error } = await supabase
+        .from('job_applications')
+        .insert({
+          job_id: applicationData.jobId,
+          applicant_id: user.id,
+          full_name: applicationData.fullName,
+          photo_url: applicationData.photoUrl,
+          gender: applicationData.gender as any,
+          domicile: applicationData.domicile,
+          email: applicationData.email,
+          phone_number: applicationData.phoneNumber,
+          linkedin_url: applicationData.linkedinUrl,
+          date_of_birth: applicationData.dateOfBirth,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ 
+        queryKey: jobKeys.applications(variables.jobId) 
+      });
+      toast.success('Application submitted successfully!');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to submit application');
+    },
+  });
+}
+
+// ============================================
+// GET MY APPLICATIONS
+// ============================================
+export function useMyApplications() {
+  const supabase = createClient();
+
+  return useQuery({
+    queryKey: ['my-applications'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      const { data, error } = await supabase
+        .from('job_applications')
+        .select(`
+          *,
+          job:jobs(
+            id,
+            job_name,
+            job_type,
+            company_name,
+            salary_min,
+            salary_max,
+            status
+          )
+        `)
+        .eq('applicant_id', user.id)
+        .order('applied_at', { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
+  });
+}
