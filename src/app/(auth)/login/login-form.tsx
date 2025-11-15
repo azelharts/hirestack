@@ -14,9 +14,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginWithoutPassword } from "../action";
 
-import { Button } from "@/components/ui/button";
-import { TextField } from "@/components/ui/text-field";
-import { Tag } from "@/components/ui/tag";
+import { Button } from "@/components/button";
+import { TextField } from "@/components/text-field";
+import { Tag } from "@/components/tag";
 
 import { KeyIcon } from "@heroicons/react/24/outline";
 

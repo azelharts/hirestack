@@ -11,9 +11,9 @@ import { authFormValues, authSchema } from "@/lib/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signup } from "../action";
 
-import { TextField } from "@/components/ui/text-field";
-import { Button } from "@/components/ui/button";
-import { Tag } from "@/components/ui/tag";
+import { TextField } from "@/components/text-field";
+import { Button } from "@/components/button";
+import { Tag } from "@/components/tag";
 
 const SignUpForm = () => {
   const router = useRouter();

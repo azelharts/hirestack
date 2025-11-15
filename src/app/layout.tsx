@@ -23,7 +23,9 @@ export default function RootLayout({
   return (
     <ReactQueryClientProvider>
       <html lang="en">
-        <body className={`${nunitoSans.className} antialiased bg-neutral-20`}>
+        <body
+          className={`${nunitoSans.className} antialiased bg-neutral-20 !dark`}
+        >
           {children}
         </body>
       </html>

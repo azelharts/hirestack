@@ -9,17 +9,13 @@ import { User } from "@supabase/supabase-js";
 const AccountForm = ({ user }: { user: User | null }) => {
   const supabase = createClient();
 
-  // --- SERVER FETCHED QUERY (hydrated) ---
   const { data: country } = useQuery(getCountryById(supabase, 3));
 
-  // --- CLIENT FETCHED QUERY (CSR only) ---
   const {
     data: job,
     isLoading,
     isError,
-  } = useQuery(
-    getCountryById(supabase, 1) // no hydration, runs on client
-  );
+  } = useQuery(getCountryById(supabase, 1));
 
   return (
     <div>

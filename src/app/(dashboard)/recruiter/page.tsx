@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 
 import DashboardNavbar from "@/components/dashboard-navbar";
+import { Dialog } from "@/components/ui/dialog";
 import JobList from "./job-list";
 
 const page = async () => {
@@ -11,12 +12,12 @@ const page = async () => {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="w-full min-h-screen flex flex-col">
-      <DashboardNavbar />
-      <div className="pt-20 pb-4 px-6 max-w-container flex-1 flex flex-col">
-        <JobList user={user} />
+    <Dialog>
+      <div className="w-full min-h-screen flex flex-col">
+        <DashboardNavbar />
+        <JobList />
       </div>
-    </div>
+    </Dialog>
   );
 };
 

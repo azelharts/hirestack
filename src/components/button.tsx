@@ -4,13 +4,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "flex w-full items-center justify-center rounded-lg transition-colors",
+  "flex w-full items-center justify-center rounded-lg transition-colors focus:outline-none",
   {
     variants: {
       variant: {
-        primary: "bg-primary-main hover:bg-primary-hover text-neutral-10",
-        secondary: "bg-secondary-main hover:bg-secondary-hover text-neutral-90",
-        neutral: "bg-neutral-10 text-neutral-100",
+        primary: "bg-primary-main hover:bg-primary-hover !text-neutral-10",
+        secondary:
+          "bg-secondary-main hover:bg-secondary-hover !text-neutral-90",
+        neutral: "bg-neutral-10 !text-neutral-100",
         disabled: "bg-neutral-30 !text-neutral-60 !cursor-not-allowed",
       },
       size: {
