@@ -4,6 +4,7 @@ import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 
 import { ReactQueryClientProvider } from "@/components/react-query-client-provider";
+import { Toaster } from "sonner";
 
 const nunitoSans = Nunito_Sans({
   variable: "--font-nunito-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({
           className={`${nunitoSans.className} antialiased bg-neutral-20 !dark`}
         >
           {children}
+          <Toaster position="bottom-left" closeButton richColors expand />
         </body>
       </html>
     </ReactQueryClientProvider>

@@ -36,7 +36,7 @@ export function useJobs(params?: {
         .from('jobs')
         .select(`
           *,
-          recruiter:profiles!recruiter_id(full_name, avatar_url, company_name),
+          recruiter:profiles!recruiter_id(full_name, avatar_url),
           application_count:job_applications(count)
         `)
         .order('created_at', { ascending: false });
@@ -156,32 +156,32 @@ export function useCreateJob() {
 // ============================================
 // UPDATE JOB MUTATION
 // ============================================
-export function useUpdateJob(jobId: string) {
+export function useUpdateJob() {
   const queryClient = useQueryClient();
   const supabase = createClient();
 
   return useMutation({
-    mutationFn: async (updates: Partial<JobUpdate>) => {
+    mutationFn: async ({ jobId, updates }: { jobId: string; updates: Partial<JobUpdate> }) => {
       const { data, error } = await supabase
-        .from('jobs')
+        .from("jobs")
         .update(updates)
-        .eq('id', jobId)
+        .eq("id", jobId)
         .select()
         .single();
 
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+
+    onSuccess: (_, { jobId }) => {
       queryClient.invalidateQueries({ queryKey: jobKeys.lists() });
       queryClient.invalidateQueries({ queryKey: jobKeys.detail(jobId) });
-      toast.success('Job updated successfully!');
     },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : 'Failed to update job');
-    },
+
+    
   });
 }
+
 
 // ============================================
 // DELETE JOB MUTATION

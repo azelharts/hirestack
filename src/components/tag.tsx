@@ -3,7 +3,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const tagVariants = cva("rounded-sm border text-center py-0.5 px-2", {
+const tagVariants = cva("rounded-lg border py-1 px-4", {
   variants: {
     variant: {
       success: "bg-success-surface border-success-border !text-success-main",

@@ -36,6 +36,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { jobTypes, profileFields } from "@/lib/constant";
 import { Button } from "@/components/button";
+import { useCreateJob } from "@/queries/job";
 
 const CreateJobForm = () => {
   const router = useRouter();
@@ -49,7 +50,7 @@ const CreateJobForm = () => {
       jobType: "",
       jobDescription: "",
       department: "",
-      companyName: "",
+      companyName: "Rakamin",
       numberOfCandidatesNeeded: 1,
       jobSalary: {
         // @ts-expect-error
@@ -73,43 +74,20 @@ const CreateJobForm = () => {
     reValidateMode: "onChange",
   });
 
+  const createJob = useCreateJob();
   const onSubmit = async (
     data: z.infer<typeof jobOpeningSchema>,
     status: "draft" | "active"
   ) => {
-    setIsSubmitting(true);
-    console.log(JSON.stringify(data, null, 2));
-
-    try {
-      const response = await fetch("/api/jobs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, status }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create job");
+    createJob.mutate(
+      { ...data, status },
+      {
+        onSuccess: () => {
+          form.reset();
+          router.refresh();
+        },
       }
-
-      const result = await response.json();
-
-      toast.success(
-        status === "draft"
-          ? "Job saved as draft"
-          : "Job published successfully!"
-      );
-
-      form.reset();
-      router.refresh();
-    } catch (error) {
-      console.error("Error creating job:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to create job"
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
+    );
   };
 
   return (
@@ -434,6 +412,7 @@ const CreateJobForm = () => {
             variant={form.formState.isValid ? "neutral" : "disabled"}
             size="medium"
             className="w-fit!"
+            // @ts-expect-error
             onClick={form.handleSubmit((data) => onSubmit(data, "draft"))}
           >
             Save as Draft
@@ -444,6 +423,7 @@ const CreateJobForm = () => {
             variant={form.formState.isValid ? "primary" : "disabled"}
             size="medium"
             className="w-fit!"
+            // @ts-expect-error
             onClick={form.handleSubmit((data) => onSubmit(data, "active"))}
           >
             Publish Job
