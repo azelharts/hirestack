@@ -1,13 +1,11 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/server";
-
 import DashboardNavbar from "@/components/dashboard-navbar";
 import { Dialog } from "@/components/ui/dialog";
-import CandidateManagement from "./candidate-management";
 import { use } from "react";
+import CandidateManagement from "./candidate-management";
 
-const page = ({ params }: { params: Promise<{ id: string }> }) => {
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id: jobId } = use(params);
 
   return (
@@ -20,4 +18,4 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
   );
 };
 
-export default page;
+export default Page;

@@ -35,16 +35,14 @@ const DashboardNavbar = () => {
       )}
 
       <div className="flex gap-x-2 items-center">
-        <Link href="/profile">
-          <Image
-            src="/assets/images/mas-kanye.webp"
-            alt="profile picture"
-            width={28}
-            height={28}
-            priority
-            className="border border-neutral-40 rounded-full"
-          />
-        </Link>
+        <Image
+          src="/assets/images/mas-kanye.webp"
+          alt="profile picture"
+          width={28}
+          height={28}
+          priority
+          className="border border-neutral-40 rounded-full"
+        />
         <form action="/api/auth/signout" method="post">
           <Button variant="primary" size="small" type="submit">
             Sign out

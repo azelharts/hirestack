@@ -1,12 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { createJobApplicationSchema } from "@/lib/validations/job";
-import { useSubmitApplication } from "@/queries/job";
+import { Button } from "@/components/button";
+import ToastNotification from "@/components/toast-notification";
 import {
   Field,
   FieldError,
@@ -15,26 +10,29 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/button";
+import { countryCodes, genderOptions, indonesianCities } from "@/lib/constant";
+import { createJobApplicationSchema } from "@/lib/validations/job";
+import { useSubmitApplication } from "@/queries/job";
+import { Database } from "@/utils/supabase/database.types";
 import {
   ArrowLeftIcon,
   ArrowUpTrayIcon,
   CalendarDaysIcon,
   CheckCircleIcon,
   ChevronDownIcon,
-  ChevronLeftIcon,
 } from "@heroicons/react/24/outline";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ChevronLeft,
   ChevronRight,
@@ -42,9 +40,10 @@ import {
   ChevronsRight,
 } from "lucide-react";
 import Image from "next/image";
-import { genderOptions, countryCodes, indonesianCities } from "@/lib/constant";
-import { Database } from "@/utils/supabase/database.types";
-import ToastNotification from "@/components/toast-notification";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type Job = Database["public"]["Tables"]["jobs"]["Row"];
 
@@ -67,15 +66,6 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
 
   // Use React Query mutation
   const submitApplicationMutation = useSubmitApplication();
-
-  // Early return if job is not loaded
-  if (!job) {
-    return (
-      <div className="max-w-3xl mx-auto px-6 py-12">
-        <div className="text-center">Loading...</div>
-      </div>
-    );
-  }
 
   // Create dynamic schema based on job requirements
   const schema = createJobApplicationSchema({
@@ -105,6 +95,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
     mode: "onChange",
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     console.log(data);
     try {
@@ -150,6 +141,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
     return linkedInPattern.test(url);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleLinkedInChange = (value: string, onChange: any) => {
     onChange(value);
     setIsLinkedInValid(validateLinkedInUrl(value));
@@ -218,6 +210,15 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
 
   const isSubmitting = submitApplicationMutation.isPending;
 
+  // Early return if job is not loaded
+  if (!job) {
+    return (
+      <div className="max-w-3xl mx-auto px-6 py-12">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-container h-full flex items-center">
       {/* Form */}
@@ -253,7 +254,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
               <Controller
                 name="photoUrl"
                 control={form.control}
-                render={({ field, fieldState }) => (
+                render={({ fieldState }) => (
                   <Field
                     data-invalid={fieldState.invalid}
                     className="flex flex-col gap-y-2"
@@ -282,6 +283,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                         className="hidden"
                         ref={(input) => {
                           if (input) {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             (window as any).photoInput = input;
                           }
                         }}

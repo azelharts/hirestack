@@ -109,7 +109,7 @@ const LogInForm = () => {
               className="gap-x-2.5 text-sm"
             >
               <KeyIcon width={16} height={16} color="#111827" />
-              "Kirim link login melalui email"
+              Kirim link login melalui email
             </Button>
           </Link>
 

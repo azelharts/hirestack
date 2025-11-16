@@ -17,7 +17,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value }) =>
             // Passing the refreshed Auth token to Server Components through request.cookies.set, so they don't attempt to refresh the same token themselves.
             request.cookies.set(name, value)
           );

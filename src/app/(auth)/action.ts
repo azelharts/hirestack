@@ -60,13 +60,13 @@ export async function loginWithoutPassword(formData: FormData) {
     throw new Error("Email is required");
   }
 
-  const { data, error } = await supabase.auth.signInWithOtp({
+  const {  error } = await supabase.auth.signInWithOtp({
     email,
     options: {
       shouldCreateUser: false,
       emailRedirectTo:
         `${process.env.NEXT_PUBLIC_SITE_URL}/recruiter` ||
-        "http://localhost:3000",
+        "http://localhost:3000/recruiter",
     },
   });
 

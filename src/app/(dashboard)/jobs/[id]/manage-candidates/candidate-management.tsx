@@ -1,22 +1,17 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-  ChevronUpIcon,
-  ChevronDownIcon,
-  FunnelIcon,
-  XMarkIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  BarsArrowUpIcon,
-  BarsArrowDownIcon,
-  Bars3BottomLeftIcon,
-} from "@heroicons/react/24/outline";
-import { countryCodes, indonesianCities } from "@/lib/constant";
 import { Button } from "@/components/button";
+import { countryCodes, indonesianCities } from "@/lib/constant";
 import { useJobApplications } from "@/queries/job";
+import {
+  Bars3BottomLeftIcon,
+  BarsArrowDownIcon,
+  BarsArrowUpIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 // Types
 interface Application {
@@ -30,36 +25,11 @@ interface Application {
   applied_at: string;
 }
 
-interface ApplicationsResponse {
-  applications: Application[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}
-
-interface QueryParams {
-  page: number;
-  pageSize: number;
-  sortBy: string;
-  sortOrder: "asc" | "desc";
-  phoneFilter: string;
-  genderFilter: string;
-  domicileFilter: string;
-  dateFilter: string;
-}
-
 interface Column {
   id: keyof Application;
   label: string;
   width: number;
   filterable?: boolean;
-}
-
-interface CountryCode {
-  value: string;
-  label: string;
-  country: string;
 }
 
 const initialColumns: Column[] = [
@@ -165,14 +135,20 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
     startWidthRef.current = columns.find((c) => c.id === colId)!.width;
   };
 
-  const handleResizeMove = (e: MouseEvent) => {
-    if (!resizingColumn) return;
-    const delta = e.clientX - startXRef.current;
-    const newWidth = Math.max(100, startWidthRef.current + delta);
-    setColumns((prev) =>
-      prev.map((c) => (c.id === resizingColumn ? { ...c, width: newWidth } : c))
-    );
-  };
+  // FIX 1: Wrap handleResizeMove in useCallback to stabilize the dependency
+  const handleResizeMove = useCallback(
+    (e: MouseEvent) => {
+      if (!resizingColumn) return;
+      const delta = e.clientX - startXRef.current;
+      const newWidth = Math.max(100, startWidthRef.current + delta);
+      setColumns((prev) =>
+        prev.map((c) =>
+          c.id === resizingColumn ? { ...c, width: newWidth } : c
+        )
+      );
+    },
+    [resizingColumn]
+  );
 
   const handleResizeEnd = () => setResizingColumn(null);
 
@@ -184,7 +160,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
       document.removeEventListener("mousemove", handleResizeMove);
       document.removeEventListener("mouseup", handleResizeEnd);
     };
-  }, [resizingColumn]);
+  }, [resizingColumn, handleResizeMove]);
 
   /* ----------  reorder handlers ---------- */
   const handleDragStart = (e: React.DragEvent, colId: string) => {
@@ -231,12 +207,13 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
     applications.length > 0 &&
     applications.every((app) => selectedIds.has(app.id));
 
+  // FIX 2: Move hooks to the top level of the component (before the early return)
   const FilterDropdown = ({ columnId }: { columnId: string }) => {
-    if (activeFilter !== columnId) return null;
-
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+      if (activeFilter !== columnId) return;
+
       const handleClickOutside = (event: MouseEvent) => {
         if (
           dropdownRef.current &&
@@ -249,7 +226,9 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
       document.addEventListener("mousedown", handleClickOutside);
       return () =>
         document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    }, [activeFilter, columnId]);
+
+    if (activeFilter !== columnId) return null;
 
     return (
       <div

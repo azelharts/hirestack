@@ -54,6 +54,7 @@ export type JobApplication = z.infer<typeof jobApplicationSchema>;
 
 // Dynamic validation based on job requirements
 export function createJobApplicationSchema(jobRequirements: JobOpening['minimumProfileInformation']) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const shape: any = {
     jobId: z.string().uuid(),
   };

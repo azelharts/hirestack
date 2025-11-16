@@ -126,7 +126,7 @@ const LogInForm = () => {
               className="gap-x-2.5 text-sm"
             >
               <KeyIcon width={16} height={16} color="#111827" />
-              "Masuk dengan kata sandi"
+              &quot;Masuk dengan kata sandi&quot;
             </Button>
           </Link>
 

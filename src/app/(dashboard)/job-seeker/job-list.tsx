@@ -2,23 +2,21 @@
 
 import { Button } from "@/components/button";
 import { useJob, useJobs } from "@/queries/job";
-import { useRouter, useSearchParams } from "next/navigation";
 import {
   BriefcaseIcon,
   CreditCardIcon,
-  CurrencyDollarIcon,
   MapPinIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const JobList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
   const [selectedJobId, setSelectedJobId] = useState<string | null>(
     searchParams.get("selected-job")
   );
@@ -27,11 +25,9 @@ const JobList = () => {
   const { data: jobs = [], isLoading: loading } = useJobs();
 
   // Fetch selected job details
-  const {
-    data: selectedJob,
-    isLoading: loadingDetail,
-    isError,
-  } = useJob(selectedJobId || "");
+  const { data: selectedJob, isLoading: loadingDetail } = useJob(
+    selectedJobId || ""
+  );
 
   const filteredJobs = jobs.filter(
     (job) =>
@@ -60,19 +56,6 @@ const JobList = () => {
       minimumFractionDigits: 0,
     });
     return `${formatter.format(min)} - ${formatter.format(max)}`;
-  };
-
-  const timeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return `${Math.floor(diffDays / 30)} months ago`;
   };
 
   return (

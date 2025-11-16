@@ -4,6 +4,7 @@ import DashboardNavbar from "@/components/dashboard-navbar";
 import { Dialog } from "@/components/ui/dialog";
 import JobList from "./job-list";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 const page = async () => {
   const supabase = await createClient();
@@ -27,12 +28,14 @@ const page = async () => {
   }
 
   return (
-    <Dialog>
-      <div className="w-full min-h-screen flex flex-col">
-        <DashboardNavbar />
-        <JobList />
-      </div>
-    </Dialog>
+    <Suspense>
+      <Dialog>
+        <div className="w-full min-h-screen flex flex-col">
+          <DashboardNavbar />
+          <JobList />
+        </div>
+      </Dialog>
+    </Suspense>
   );
 };
 

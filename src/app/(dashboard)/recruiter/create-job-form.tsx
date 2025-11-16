@@ -1,14 +1,10 @@
 "use client";
-import { useState } from "react";
-
-import { useRouter } from "next/navigation";
 
 import { jobOpeningSchema } from "@/lib/validations/job";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { toast } from "sonner";
 import {
   DialogClose,
   DialogContent,
@@ -31,20 +27,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
-import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
-import { jobTypes, profileFields } from "@/lib/constant";
 import { Button } from "@/components/button";
-import { useCreateJob } from "@/queries/job";
 import ToastNotification from "@/components/toast-notification";
+import { jobTypes, profileFields } from "@/lib/constant";
+import { useCreateJob } from "@/queries/job";
 
 const CreateJobForm = () => {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const form = useForm<z.infer<typeof jobOpeningSchema>>({
-    // @ts-expect-error
+    // @ts-expect-error ignore for now
     resolver: zodResolver(jobOpeningSchema),
     defaultValues: {
       jobName: "",
@@ -54,9 +48,9 @@ const CreateJobForm = () => {
       companyName: "Rakamin",
       numberOfCandidatesNeeded: 1,
       jobSalary: {
-        // @ts-expect-error
+        // @ts-expect-error ignore for now
         minimum: "",
-        // @ts-expect-error
+        // @ts-expect-error ignore for now
         maximum: "",
       },
       minimumProfileInformation: {
@@ -116,7 +110,7 @@ const CreateJobForm = () => {
         </DialogTitle>
       </DialogHeader>
 
-      {/* @ts-expect-error */}
+      {/* @ts-expect-error ignore for now */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full h-full">
         {/* Form Header */}
         <div className="sticky z-50 top-0 left-0 w-full flex justify-between items-start p-6 border-b gap-y-2 bg-neutral-10 border-neutral-40">
@@ -207,6 +201,7 @@ const CreateJobForm = () => {
                   <Input
                     {...field}
                     id="department"
+                    aria-invalid={fieldState.invalid}
                     placeholder="Ex. Engineering"
                   />
                 </Field>
@@ -218,7 +213,12 @@ const CreateJobForm = () => {
               render={({ field, fieldState }) => (
                 <Field className="flex flex-col gap-y-2">
                   <FieldLabel htmlFor="company">Company Name</FieldLabel>
-                  <Input {...field} id="company" placeholder="Ex. Videfly" />
+                  <Input
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                    id="company"
+                    placeholder="Ex. Videfly"
+                  />
                 </Field>
               )}
             />
@@ -371,7 +371,7 @@ const CreateJobForm = () => {
                       {profileField.label}
                     </span>
                     <Controller
-                      // @ts-expect-error
+                      // @ts-expect-error ignore for now
                       name={`minimumProfileInformation.${profileField.name}`}
                       control={form.control}
                       render={({ field }) => (
@@ -417,7 +417,7 @@ const CreateJobForm = () => {
 
         {/* Form Footer */}
         <div
-          // @ts-expect-error
+          // @ts-expect-error ignore for now
           onSubmit={form.handleSubmit(onSubmit)}
           className="sticky z-50 bottom-0 left-0 w-full flex justify-end p-6 border-t gap-y-2 gap-x-2 bg-neutral-10 border-neutral-40"
         >
@@ -427,7 +427,7 @@ const CreateJobForm = () => {
             variant={form.formState.isValid ? "neutral" : "disabled"}
             size="medium"
             className="w-fit!"
-            // @ts-expect-error
+            // @ts-expect-error ignore for now
             onClick={form.handleSubmit((data) => onSubmit(data, "draft"))}
           >
             Save as Draft
@@ -438,7 +438,7 @@ const CreateJobForm = () => {
             variant={form.formState.isValid ? "primary" : "disabled"}
             size="medium"
             className="w-fit!"
-            // @ts-expect-error
+            // @ts-expect-error ignore for now
             onClick={form.handleSubmit((data) => onSubmit(data, "active"))}
           >
             Publish Job

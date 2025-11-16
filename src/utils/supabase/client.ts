@@ -1,8 +1,7 @@
 // Client Component client - To access Supabase from Client Components, which run in the browser.
 import { createBrowserClient } from "@supabase/ssr";
-import { TypedSupabaseClient } from "./types";
 import { Database } from "./database.types";
-import { useMemo } from "react";
+import { TypedSupabaseClient } from "./types";
 
 let client: TypedSupabaseClient | undefined
 
@@ -21,5 +20,5 @@ function getSupabaseBrowserClient() {
 }
 
 export function createClient() {
-  return useMemo(getSupabaseBrowserClient, [])
+  return getSupabaseBrowserClient()
 }

@@ -34,7 +34,7 @@ import { toast } from "sonner";
 
 const JobList = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [statusFilter] = useState<string>("all");
 
   // Fetch current recruiter's job
   const { data: jobs = [], isLoading } = useJobs({

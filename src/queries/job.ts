@@ -1,12 +1,10 @@
 // queries/job.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/utils/supabase/client';
 import { Database } from '@/utils/supabase/database.types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { toast } from 'sonner';
 
 type Job = Database['public']['Tables']['jobs']['Row'];
-type JobInsert = Database['public']['Tables']['jobs']['Insert'];
 type JobUpdate = Database['public']['Tables']['jobs']['Update'];
 
 // Query Keys
@@ -109,6 +107,7 @@ export function useCreateJob() {
       companyName?: string;
       numberOfCandidatesNeeded: number;
       jobSalary: { minimum: number; maximum: number };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       minimumProfileInformation: any;
       status: 'draft' | 'active' | 'inactive';
     }) => {
@@ -221,7 +220,7 @@ export function useJobApplications(jobId: string, params: {
         .from('job_applications')
         .select('*', { count: 'exact' })
         .eq('job_id', jobId);
-        
+
       // Apply filters
       if (params.phoneFilter && params.phoneFilter !== 'all') {
         query = query.ilike('phone_number', `${params.phoneFilter}%`);
@@ -237,7 +236,7 @@ export function useJobApplications(jobId: string, params: {
       
       if (params.dateFilter && params.dateFilter !== 'all') {
         const now = new Date();
-        let filterDate = new Date();
+        const filterDate = new Date();
         
         if (params.dateFilter === '24h') {
           filterDate.setHours(now.getHours() - 24);
@@ -315,7 +314,7 @@ export function useSubmitApplication() {
           applicant_id: user.id,
           full_name: applicationData.fullName,
           photo_url: applicationData.photoUrl,
-          gender: applicationData.gender as any,
+          gender: applicationData.gender as "male" | "female",
           domicile: applicationData.domicile,
           email: applicationData.email,
           phone_number: applicationData.phoneNumber,
