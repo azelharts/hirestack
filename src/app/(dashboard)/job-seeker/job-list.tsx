@@ -83,7 +83,7 @@ const JobList = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main" />
         </div>
       ) : filteredJobs.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20">
+        <div className="flex flex-1 flex-col items-center gap-y-4 justify-center">
           <Image
             src="/assets/images/empty-job.svg"
             alt="No jobs"
@@ -91,11 +91,14 @@ const JobList = () => {
             height={300}
             priority
           />
-          <p className="text-xl text-neutral-70 mt-6">
-            {searchQuery
-              ? "No jobs match your search"
-              : "No jobs available at the moment"}
-          </p>
+          <div className="flex flex-col gap-y-1 items-center">
+            <p className="heading-s-bold text-nuetral-90">
+              No job openings available
+            </p>
+            <span className="text-l text-neutral-90">
+              Please wait for the next batch of openings.
+            </span>
+          </div>
         </div>
       ) : (
         <div className="flex flex-1 gap-x-6 relative">

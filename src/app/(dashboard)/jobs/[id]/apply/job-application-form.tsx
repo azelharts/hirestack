@@ -26,6 +26,7 @@ import {
   ArrowLeftIcon,
   ArrowUpTrayIcon,
   CalendarDaysIcon,
+  CheckCircleIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
 } from "@heroicons/react/24/outline";
@@ -117,7 +118,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
       toast.custom((t) => (
         <ToastNotification text="Job vacancy successfully applied" t={t} />
       ));
-      router.push(`/job-seeker?selected-job=${job.id}`);
+      router.push(`/jobs/${job.id}/apply/success`);
     } catch (error) {
       toast.custom((t) => (
         <ToastNotification
@@ -228,6 +229,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
           {/* Header */}
           <div className="flex items-center gap-x-4">
             <button
+              type="button"
               onClick={() => router.back()}
               className="w-fit rounded-lg border p-1 bg-neutral-10 border-neutral-40 shadow-button"
             >
@@ -236,11 +238,11 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                 strokeWidth={3}
               />
             </button>
-            <div className="flex flex-1 items-center justify-between">
-              <p className="text-xl-bold text-neutral-100">
+            <div className="flex flex-1 gap-x-4 items-center justify-between max-w-full">
+              <p className="text-xl-bold text-neutral-100 flex-1 truncate">
                 Apply {job.job_name} at {job.company_name}
               </p>
-              <span className="text-m text-neutral-90">
+              <span className="text-m text-neutral-90 shrink-0 text-end">
                 ℹ️ This field required to fill
               </span>
             </div>
@@ -669,7 +671,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                               className="h-9"
                             />
                           </div>
-                          <div className="min-h-[260px] max-h-[260px] overflow-y-auto">
+                          <div className="min-h-fit max-h-[260px] overflow-y-auto">
                             {filteredCountries.length > 0 ? (
                               filteredCountries.map((code) => (
                                 <SelectItem key={code.value} value={code.value}>
@@ -677,7 +679,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                                     <span className="text-xl">
                                       {getCountryFlag(code.value)}
                                     </span>
-                                    <span className="font-medium">
+                                    <span className="font-medium flex-1">
                                       {code.country}
                                     </span>
                                     <span className="text-neutral-60">
@@ -778,8 +780,9 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                       }
                     />
                     {isLinkedInValid && (
-                      <p className="text-xs text-success-main flex items-center gap-1">
-                        ✓ Valid LinkedIn profile URL
+                      <p className="text-s text-primary-main flex items-center gap-x-1">
+                        <CheckCircleIcon className="size-4 text-primary-main" />{" "}
+                        URL address found
                       </p>
                     )}
                     {fieldState.invalid && (
