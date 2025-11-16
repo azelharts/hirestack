@@ -799,12 +799,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
 
         {/* Submit Button */}
         <div className="bg-neutral-10 border-neutral-40 sticky bottom-0 w-full border-t px-10 py-6">
-          <Button
-            type="submit"
-            variant={form.formState.isValid ? "primary" : "disabled"}
-            size="large"
-            disabled={!form.formState.isValid || isSubmitting}
-          >
+          <Button type="submit" variant={"primary"} size="large">
             Submit
           </Button>
         </div>

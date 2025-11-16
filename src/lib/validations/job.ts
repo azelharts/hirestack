@@ -66,15 +66,15 @@ export function createJobApplicationSchema(jobRequirements: JobOpening['minimumP
   }
 
   if (jobRequirements.photoProfile === 'Mandatory') {
-    shape.photoUrl = z.string('Valid photo URL is required').min(1);
+    shape.photoUrl = z.string('Photo profile is required').min(1, "Photo profile is required");
   } else if (jobRequirements.photoProfile === 'Optional') {
     shape.photoUrl = z.string().url().optional().or(z.literal(''));
   }
 
   if (jobRequirements.gender === 'Mandatory') {
-    shape.gender = z.enum(['male', 'female']);
+    shape.gender = z.enum(['male', 'female'], "Gender is required");
   } else if (jobRequirements.gender === 'Optional') {
-    shape.gender = z.enum(['male', 'female']).optional();
+    shape.gender = z.enum(['male', 'female'], "Gender is required").optional();
   }
 
   if (jobRequirements.domicile === 'Mandatory') {
@@ -84,7 +84,7 @@ export function createJobApplicationSchema(jobRequirements: JobOpening['minimumP
   }
 
   if (jobRequirements.email === 'Mandatory') {
-    shape.email = z.string().email('Make sure your email address is correct (eg: name@domain.com)').min(1);
+    shape.email = z.string().email('Make sure your email address is correct (eg: name@domain.com)').min(1, "Email is required");
   } else if (jobRequirements.email === 'Optional') {
     shape.email = z.string().email().optional().or(z.literal(''));
   }
@@ -96,7 +96,7 @@ export function createJobApplicationSchema(jobRequirements: JobOpening['minimumP
   }
 
   if (jobRequirements.linkedInLink === 'Mandatory') {
-    shape.linkedinUrl = z.string().min(25, "Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile").startsWith("https://linkedin.com/in/").url('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)').min(1);
+    shape.linkedinUrl = z.string().min(25, "Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile").startsWith("https://linkedin.com/in/").url('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourprofile)').min(1, "Linkedin url is required");
   } else if (jobRequirements.linkedInLink === 'Optional') {
     shape.linkedinUrl = z.string().url().optional().or(z.literal(''));
   }

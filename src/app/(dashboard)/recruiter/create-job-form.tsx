@@ -384,8 +384,11 @@ const CreateJobForm = () => {
                                 disabled={
                                   (profileIndex === 0 ||
                                     profileIndex === 1 ||
+                                    profileIndex == 2 ||
                                     profileIndex === 4) &&
-                                  (mandatoryIndex === 1 || mandatoryIndex === 2)
+                                  (mandatoryIndex === 1 ||
+                                    (profileIndex !== 2 &&
+                                      mandatoryIndex === 2))
                                 }
                                 onClick={() => field.onChange(level)}
                                 className={`text-m disabled:bg-neutral-30 disabled:border-neutral-40 disabled:text-neutral-60 rounded-2xl border px-3 py-1 transition-all disabled:pointer-events-none ${
