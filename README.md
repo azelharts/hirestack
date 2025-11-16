@@ -11,7 +11,7 @@ This is a complete **Job Recruitment Platform** featuring two user roles:
 
 ### 🗄️ Database Schema
 
-![Database Schema](https://drive.google.com/file/d/12gZ5v8p_AFwauYj9TMsKJaxzbYrELi7-/view?usp=sharing)
+![Database Schema](https://res.cloudinary.com/dysmngiix/image/upload/v1763323520/supabase-schema-sdvndcbdqlsupjznwhhn_tokp64.png)
 
 ---
 
