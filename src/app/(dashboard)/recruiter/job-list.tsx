@@ -9,46 +9,28 @@ import { TextField } from "@/components/text-field";
 import { DialogTrigger } from "@/components/ui/dialog";
 
 import {
-  CheckCircleIcon,
   EllipsisVerticalIcon,
   MagnifyingGlassIcon,
   NoSymbolIcon,
   PencilIcon,
   PowerIcon,
   TrashIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import CreateJobForm from "./create-job-form";
 
-import { Database } from "@/utils/supabase/database.types";
-import { useDeleteJob, useJobs, useUpdateJob } from "@/queries/job";
+import { Tag } from "@/components/tag";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDeleteJob, useJobs, useUpdateJob } from "@/queries/job";
 import Link from "next/link";
-import { Tag } from "@/components/tag";
 
+import ToastNotification from "@/components/toast-notification";
 import { formatDate, formatSalaryRange } from "@/lib/utils";
 import { toast } from "sonner";
-
-type Job = Database["public"]["Tables"]["jobs"]["Row"] & {
-  application_count?: { count: number }[];
-};
-
-const statusColors = {
-  active: "bg-success-main text-white",
-  inactive: "bg-neutral-60 text-white",
-  draft: "bg-warning-main text-neutral-100",
-};
-
-const statusLabels = {
-  active: "Active",
-  inactive: "Inactive",
-  draft: "Draft",
-};
 
 const JobList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -64,8 +46,25 @@ const JobList = () => {
   const updateMutation = useUpdateJob();
 
   const handleDelete = async (jobId: string) => {
-    if (!confirm("Are you sure you want to delete this job?")) return;
-    deleteMutation.mutate(jobId);
+    deleteMutation.mutate(jobId, {
+      onSuccess: () => {
+        toast.custom((t) => (
+          <ToastNotification text="Job vacancy successfully deleted" t={t} />
+        ));
+      },
+
+      onError: (error) => {
+        toast.custom((t) => (
+          <ToastNotification
+            variant="error"
+            text={
+              error instanceof Error ? error.message : "Failed to update job"
+            }
+            t={t}
+          />
+        ));
+      },
+    });
   };
 
   const handleStatusChange = (
@@ -80,25 +79,20 @@ const JobList = () => {
       {
         onSuccess: () => {
           toast.custom((t) => (
-            <div className="w-fit rounded-lg border-l-4 p-4 gap-x-4 flex justify-between items-center bg-neutral-10 border-primary-main shadow-modal relative">
-              <div className="flex items-center gap-x-2">
-                <CheckCircleIcon className="size-5 text-primary-main" />
-                <span className="text-m-bold text-neutral-90">
-                  Job vacancy updated successfully
-                </span>
-              </div>
-
-              <button onClick={() => toast.dismiss(t)}>
-                <XMarkIcon className="text-neutral-100 size-5" />
-              </button>
-            </div>
+            <ToastNotification text="Job vacancy successfully updated" t={t} />
           ));
         },
 
         onError: (error) => {
-          toast.error(
-            error instanceof Error ? error.message : "Failed to update job"
-          );
+          toast.custom((t) => (
+            <ToastNotification
+              variant="error"
+              text={
+                error instanceof Error ? error.message : "Failed to update job"
+              }
+              t={t}
+            />
+          ));
         },
       }
     );
@@ -109,12 +103,6 @@ const JobList = () => {
       job.job_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.job_description.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const getApplicationCount = (job: Job) => {
-    return job.application_count?.[0]?.count || 0;
-  };
-
-  console.log(jobs);
 
   return (
     <>
@@ -196,13 +184,10 @@ const JobList = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
                           <DropdownMenuItem asChild>
-                            <Link
-                              href={`/jobs/${job.id}/edit`}
-                              className="flex items-center gap-x-2"
-                            >
-                              <PencilIcon className="w-4 h-4" />
+                            <button className="flex items-center gap-x-2 pointer-events-none cursor-not-allowed bg-neutral-30 text-neutral-60 w-full">
+                              <PencilIcon className="w-4 h-4 text-neutral-60" />
                               Edit Job
-                            </Link>
+                            </button>
                           </DropdownMenuItem>
                           {job.status === "active" ? (
                             <DropdownMenuItem

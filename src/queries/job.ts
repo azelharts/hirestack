@@ -145,10 +145,6 @@ export function useCreateJob() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: jobKeys.lists() });
-      toast.success('Job created successfully!');
-    },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : 'Failed to create job');
     },
   });
 }
@@ -176,9 +172,7 @@ export function useUpdateJob() {
     onSuccess: (_, { jobId }) => {
       queryClient.invalidateQueries({ queryKey: jobKeys.lists() });
       queryClient.invalidateQueries({ queryKey: jobKeys.detail(jobId) });
-    },
-
-    
+    },    
   });
 }
 
@@ -201,10 +195,6 @@ export function useDeleteJob() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: jobKeys.lists() });
-      toast.success('Job deleted successfully!');
-    },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete job');
     },
   });
 }
@@ -292,10 +282,6 @@ export function useSubmitApplication() {
       queryClient.invalidateQueries({ 
         queryKey: jobKeys.applications(variables.jobId) 
       });
-      toast.success('Application submitted successfully!');
-    },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : 'Failed to submit application');
     },
   });
 }

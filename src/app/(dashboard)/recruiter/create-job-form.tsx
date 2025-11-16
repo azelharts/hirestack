@@ -32,11 +32,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { jobTypes, profileFields } from "@/lib/constant";
 import { Button } from "@/components/button";
 import { useCreateJob } from "@/queries/job";
+import ToastNotification from "@/components/toast-notification";
 
 const CreateJobForm = () => {
   const router = useRouter();
@@ -84,7 +85,21 @@ const CreateJobForm = () => {
       {
         onSuccess: () => {
           form.reset();
-          router.refresh();
+          toast.custom((t) => (
+            <ToastNotification text="Job vacancy successfully created" t={t} />
+          ));
+        },
+
+        onError: (error) => {
+          toast.custom((t) => (
+            <ToastNotification
+              variant="error"
+              text={
+                error instanceof Error ? error.message : "Failed to update job"
+              }
+              t={t}
+            />
+          ));
         },
       }
     );
