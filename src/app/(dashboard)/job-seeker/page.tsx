@@ -1,10 +1,9 @@
-import { redirect } from "next/navigation";
-
 import { createClient } from "@/utils/supabase/server";
 
 import DashboardNavbar from "@/components/dashboard-navbar";
 import { Dialog } from "@/components/ui/dialog";
 import JobList from "./job-list";
+import { redirect } from "next/navigation";
 
 const page = async () => {
   const supabase = await createClient();
@@ -16,15 +15,15 @@ const page = async () => {
 
   if (!user) redirect("/login");
 
-  // Redirect if not recruiter
+  // Redirect if not job seeker
   const { data: profile } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user?.id)
     .single();
 
-  if (!profile || profile.role !== "recruiter") {
-    redirect("/job-seeker?selected-job=none");
+  if (!profile || profile.role !== "job_seeker") {
+    redirect("/recruiter");
   }
 
   return (

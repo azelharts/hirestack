@@ -49,7 +49,7 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/account");
+  redirect("/recruiter");
 }
 
 export async function loginWithoutPassword(formData: FormData) {
@@ -65,7 +65,7 @@ export async function loginWithoutPassword(formData: FormData) {
     options: {
       shouldCreateUser: false,
       emailRedirectTo:
-        `${process.env.NEXT_PUBLIC_SITE_URL}/account` ||
+        `${process.env.NEXT_PUBLIC_SITE_URL}/recruiter` ||
         "http://localhost:3000",
     },
   });
@@ -78,3 +78,5 @@ export async function loginWithoutPassword(formData: FormData) {
   revalidatePath("/", "layout");
   redirect(`/confirm?email=${encodeURIComponent(email)}`);
 }
+
+

@@ -1,4 +1,4 @@
-// lib/queries/jobs.ts
+// queries/job.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/utils/supabase/client';
 import { Database } from '@/utils/supabase/database.types';
@@ -81,7 +81,7 @@ export function useJob(jobId: string) {
         .from('jobs')
         .select(`
           *,
-          recruiter:profiles!recruiter_id(full_name, avatar_url, company_name)
+          recruiter:profiles!recruiter_id(full_name, avatar_url)
         `)
         .eq('id', jobId)
         .single();
@@ -202,23 +202,73 @@ export function useDeleteJob() {
 // ============================================
 // FETCH JOB APPLICATIONS
 // ============================================
-export function useJobApplications(jobId: string) {
+export function useJobApplications(jobId: string, params: {
+  page: number;
+  pageSize: number;
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
+  phoneFilter?: string;
+  genderFilter?: string;
+  domicileFilter?: string;
+  dateFilter?: string;
+}) {
   const supabase = createClient();
 
   return useQuery({
-    queryKey: jobKeys.applications(jobId),
+    queryKey: ['job-applications', jobId, params],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('job_applications')
-        .select(`
-          *,
-          applicant:profiles!applicant_id(id, username, avatar_url)
-        `)
-        .eq('job_id', jobId)
-        .order('applied_at', { ascending: false });
+        .select('*', { count: 'exact' })
+        .eq('job_id', jobId);
+        
+      // Apply filters
+      if (params.phoneFilter && params.phoneFilter !== 'all') {
+        query = query.ilike('phone_number', `${params.phoneFilter}%`);
+      }
+      
+      if (params.genderFilter && params.genderFilter !== 'all') {
+        query = query.eq('gender', params.genderFilter as "male" | "female");
+      }
+      
+      if (params.domicileFilter && params.domicileFilter !== 'all') {
+        query = query.eq('domicile', params.domicileFilter);
+      }
+      
+      if (params.dateFilter && params.dateFilter !== 'all') {
+        const now = new Date();
+        let filterDate = new Date();
+        
+        if (params.dateFilter === '24h') {
+          filterDate.setHours(now.getHours() - 24);
+        } else if (params.dateFilter === '1w') {
+          filterDate.setDate(now.getDate() - 7);
+        } else if (params.dateFilter === '1m') {
+          filterDate.setMonth(now.getMonth() - 1);
+        }
+        
+        query = query.gte('applied_at', filterDate.toISOString());
+      }
+
+      // Apply sorting
+      query = query.order(params.sortBy, { ascending: params.sortOrder === 'asc' });
+
+      // Apply pagination
+      const from = (params.page - 1) * params.pageSize;
+      const to = from + params.pageSize - 1;
+      query = query.range(from, to);
+
+      const { data, error, count } = await query;
 
       if (error) throw error;
-      return data;
+
+      return {
+        applications: data,
+        total: count || 0,
+        page: params.page,
+        pageSize: params.pageSize,
+        totalPages: Math.ceil((count || 0) / params.pageSize),
+      };
     },
     enabled: !!jobId,
   });

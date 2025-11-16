@@ -16,6 +16,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { countryCodes, indonesianCities } from "@/lib/constant";
 import { Button } from "@/components/button";
+import { useJobApplications } from "@/queries/job";
 
 // Types
 interface Application {
@@ -61,126 +62,6 @@ interface CountryCode {
   country: string;
 }
 
-// Mock hook to simulate useJobApplications
-function useJobApplications(
-  jobId: string,
-  params: QueryParams
-): { data: ApplicationsResponse | undefined; isLoading: boolean } {
-  // Simulate pagination and filtering
-  const allApplications: Application[] = [
-    {
-      id: "1",
-      full_name: "John Doe",
-      email: "john@example.com",
-      phone_number: "+62812345678",
-      gender: "male",
-      linkedin_url: "https://linkedin.com/in/johndoe",
-      domicile: "Jakarta",
-      applied_at: "2025-11-16T10:30:00Z",
-    },
-    {
-      id: "2",
-      full_name: "Jane Smith",
-      email: "jane@example.com",
-      phone_number: "+1898765432",
-      gender: "female",
-      linkedin_url: "https://linkedin.com/in/janesmith",
-      domicile: "Bandung",
-      applied_at: "2025-11-15T14:20:00Z",
-    },
-    {
-      id: "3",
-      full_name: "Ahmad Ibrahim",
-      email: "ahmad@example.com",
-      phone_number: "+62856789012",
-      gender: "male",
-      linkedin_url: "https://linkedin.com/in/ahmadibrahim",
-      domicile: "Surabaya",
-      applied_at: "2025-11-14T09:15:00Z",
-    },
-    {
-      id: "4",
-      full_name: "Sarah Lee",
-      email: "sarah@example.com",
-      phone_number: "+65912345678",
-      gender: "female",
-      linkedin_url: "https://linkedin.com/in/sarahlee",
-      domicile: "Kupang",
-      applied_at: "2025-11-10T16:45:00Z",
-    },
-    {
-      id: "5",
-      full_name: "Michael Wong",
-      email: "michael@example.com",
-      phone_number: "+60123456789",
-      gender: "male",
-      linkedin_url: "https://linkedin.com/in/michaelwong",
-      domicile: "Medan",
-      applied_at: "2025-10-20T11:30:00Z",
-    },
-  ];
-
-  // Apply filters
-  let filtered = [...allApplications];
-
-  if (params.phoneFilter && params.phoneFilter !== "all") {
-    filtered = filtered.filter((app) =>
-      app.phone_number.startsWith(params.phoneFilter)
-    );
-  }
-
-  if (params.genderFilter && params.genderFilter !== "all") {
-    filtered = filtered.filter((app) => app.gender === params.genderFilter);
-  }
-
-  if (params.domicileFilter && params.domicileFilter !== "all") {
-    filtered = filtered.filter((app) => app.domicile === params.domicileFilter);
-  }
-
-  if (params.dateFilter && params.dateFilter !== "all") {
-    const now = new Date();
-    const filterDate = new Date(now);
-
-    if (params.dateFilter === "24h") {
-      filterDate.setHours(now.getHours() - 24);
-    } else if (params.dateFilter === "1w") {
-      filterDate.setDate(now.getDate() - 7);
-    } else if (params.dateFilter === "1m") {
-      filterDate.setMonth(now.getMonth() - 1);
-    }
-
-    filtered = filtered.filter((app) => new Date(app.applied_at) >= filterDate);
-  }
-
-  // Apply sorting
-  if (params.sortBy === "applied_at") {
-    filtered.sort((a, b) => {
-      const dateA = new Date(a.applied_at);
-      const dateB = new Date(b.applied_at);
-      return params.sortOrder === "asc"
-        ? dateA.getTime() - dateB.getTime()
-        : dateB.getTime() - dateA.getTime();
-    });
-  }
-
-  // Pagination
-  const total = filtered.length;
-  const start = (params.page - 1) * params.pageSize;
-  const end = start + params.pageSize;
-  const paginatedData = filtered.slice(start, end);
-
-  return {
-    data: {
-      applications: paginatedData,
-      total,
-      page: params.page,
-      pageSize: params.pageSize,
-      totalPages: Math.ceil(total / params.pageSize),
-    },
-    isLoading: false,
-  };
-}
-
 const initialColumns: Column[] = [
   { id: "full_name", label: "Full Name", width: 200 },
   { id: "email", label: "Email Address", width: 250 },
@@ -191,7 +72,7 @@ const initialColumns: Column[] = [
   { id: "applied_at", label: "Applied Date", width: 180, filterable: true },
 ];
 
-export default function CandidateManagement() {
+export default function CandidateManagement({ jobId }: { jobId: string }) {
   const [columns, setColumns] = useState<Column[]>(initialColumns);
   const [resizingColumn, setResizingColumn] = useState<string | null>(null);
   const [draggingColumn, setDraggingColumn] = useState<string | null>(null);
@@ -207,7 +88,7 @@ export default function CandidateManagement() {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
-  const { data, isLoading } = useJobApplications("mock-job-id", {
+  const { data, isLoading } = useJobApplications(jobId, {
     page,
     pageSize,
     sortBy: "applied_at",
@@ -236,25 +117,27 @@ export default function CandidateManagement() {
   };
 
   const formatValue = (
-    value: string,
-    columnId: keyof Application
+    value?: string,
+    columnId?: keyof Application
   ): React.ReactNode => {
-    if (columnId === "applied_at") return formatDate(value);
-    if (columnId === "gender")
-      return value.charAt(0).toUpperCase() + value.slice(1);
-    if (columnId === "linkedin_url") {
-      return (
-        <a
-          href={value}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary-main hover:underline"
-        >
-          {value}
-        </a>
-      );
-    }
-    return value || "-";
+    if (value) {
+      if (columnId === "applied_at") return formatDate(value);
+      if (columnId === "gender")
+        return value.charAt(0).toUpperCase() + value.slice(1);
+      if (columnId === "linkedin_url") {
+        return (
+          <a
+            href={value}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary-main hover:underline"
+          >
+            {value}
+          </a>
+        );
+      }
+      return value || "-";
+    } else return "-";
   };
 
   const getActiveFilterCount = (): number => {
@@ -558,6 +441,14 @@ export default function CandidateManagement() {
 
   const activeFilterCount = getActiveFilterCount();
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main" />
+      </div>
+    );
+  }
+
   return (
     <div className="pt-20 pb-4 px-6 max-w-container flex-1 flex flex-col">
       <div className="flex flex-1 flex-col gap-y-6">
@@ -703,7 +594,10 @@ export default function CandidateManagement() {
                                 className="p-4 text-m text-neutral-90 truncate text-nowrap"
                                 style={{ width: `${column.width}px` }}
                               >
-                                {formatValue(app[column.id], column.id)}
+                                {formatValue(
+                                  app[column.id] as string,
+                                  column.id
+                                )}
                               </td>
                             ))}
                           </tr>

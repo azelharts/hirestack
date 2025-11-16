@@ -229,7 +229,7 @@ const JobList = () => {
                         </div>
                       </div>
 
-                      <Link href={`/jobs/${job.id}/candidates`}>
+                      <Link href={`/jobs/${job.id}/manage-candidates`}>
                         <Button variant="primary" size="small">
                           Manage Job
                         </Button>

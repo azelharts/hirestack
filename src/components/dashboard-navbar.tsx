@@ -34,16 +34,23 @@ const DashboardNavbar = () => {
         <span className="text-xl-bold text-[#1E1F21]">Job List</span>
       )}
 
-      <Link href="/profile">
-        <Image
-          src="/assets/images/mas-kanye.webp"
-          alt="profile picture"
-          width={28}
-          height={28}
-          priority
-          className="border border-neutral-40 rounded-full"
-        />
-      </Link>
+      <div className="flex gap-x-2 items-center">
+        <Link href="/profile">
+          <Image
+            src="/assets/images/mas-kanye.webp"
+            alt="profile picture"
+            width={28}
+            height={28}
+            priority
+            className="border border-neutral-40 rounded-full"
+          />
+        </Link>
+        <form action="/api/auth/signout" method="post">
+          <Button variant="primary" size="small" type="submit">
+            Sign out
+          </Button>
+        </form>
+      </div>
     </header>
   );
 };
