@@ -72,7 +72,7 @@ const CreateJobForm = () => {
   const createJob = useCreateJob();
   const onSubmit = async (
     data: z.infer<typeof jobOpeningSchema>,
-    status: "draft" | "active"
+    status: "draft" | "active",
   ) => {
     createJob.mutate(
       { ...data, status },
@@ -95,14 +95,14 @@ const CreateJobForm = () => {
             />
           ));
         },
-      }
+      },
     );
   };
 
   return (
     <DialogContent
       showCloseButton={false}
-      className="min-w-[900px] h-[780px] no-scrollbar"
+      className="no-scrollbar h-[780px] min-w-[900px]"
     >
       <DialogHeader className="hidden">
         <DialogTitle className="text-xl-bold text-neutral-100">
@@ -111,19 +111,19 @@ const CreateJobForm = () => {
       </DialogHeader>
 
       {/* @ts-expect-error ignore for now */}
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full h-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="h-full w-full">
         {/* Form Header */}
-        <div className="sticky z-50 top-0 left-0 w-full flex justify-between items-start p-6 border-b gap-y-2 bg-neutral-10 border-neutral-40">
+        <div className="bg-neutral-10 border-neutral-40 sticky top-0 left-0 z-50 flex w-full items-start justify-between gap-y-2 border-b p-6">
           <p className="text-xl-bold text-neutral-100">Job Opening</p>
           <DialogClose asChild>
             <button type="button">
-              <XMarkIcon className="w-6 h-6 text-neutral-90" />
+              <XMarkIcon className="text-neutral-90 h-6 w-6" />
             </button>
           </DialogClose>
         </div>
 
         {/* Form Content */}
-        <FieldGroup className="py-4 px-6 flex flex=col gap-y-6">
+        <FieldGroup className="flex=col flex gap-y-6 px-6 py-4">
           {/* Job Name */}
           <Controller
             name="jobName"
@@ -265,7 +265,7 @@ const CreateJobForm = () => {
               >
                 <FieldLabel htmlFor="candidates-needed">
                   Number of Candidate Needed
-                  <span className="text-s text-red-500 -translate-x-2">*</span>
+                  <span className="text-s -translate-x-2 text-red-500">*</span>
                 </FieldLabel>
                 <Input
                   {...field}
@@ -288,10 +288,10 @@ const CreateJobForm = () => {
           {/* Job Salary */}
           <FieldSet className="flex flex-col gap-y-4">
             <div className="flex flex-col gap-y-6">
-              <div className="dashed-border w-full h-px opacity-25" />
+              <div className="dashed-border h-px w-full opacity-25" />
               <p className="text-s text-neutral-90">Job Salary</p>
             </div>
-            <div className="flex gap-x-4 items-center">
+            <div className="flex items-center gap-x-4">
               <Controller
                 name="jobSalary.minimum"
                 control={form.control}
@@ -321,7 +321,7 @@ const CreateJobForm = () => {
                   </Field>
                 )}
               />
-              <div className="min-w-4 h-px bg-neutral-40 mt-7" />
+              <div className="bg-neutral-40 mt-7 h-px min-w-4" />
               <Controller
                 name="jobSalary.maximum"
                 control={form.control}
@@ -355,7 +355,7 @@ const CreateJobForm = () => {
           </FieldSet>
 
           {/* Minimum Profile */}
-          <FieldSet className="p-4 flex flex-col gap-y-4 rounded-lg border border-neutral-30">
+          <FieldSet className="border-neutral-30 flex flex-col gap-y-4 rounded-lg border p-4">
             <p className="text-m-bold text-neutral-90">
               Minimum Profile Information Required
             </p>
@@ -364,9 +364,9 @@ const CreateJobForm = () => {
               {profileFields.map((profileField, profileIndex) => (
                 <div
                   key={profileField.name}
-                  className="flex flex-col gap-y-2 items-center justify-between"
+                  className="flex flex-col items-center justify-between gap-y-2"
                 >
-                  <div className="p-2 flex w-full  justify-between items-center">
+                  <div className="flex w-full items-center justify-between p-2">
                     <span className="text-m text-neutral-90">
                       {profileField.label}
                     </span>
@@ -388,19 +388,19 @@ const CreateJobForm = () => {
                                   (mandatoryIndex === 1 || mandatoryIndex === 2)
                                 }
                                 onClick={() => field.onChange(level)}
-                                className={`border rounded-2xl py-1 px-3 text-m disabled:bg-neutral-30 disabled:border-neutral-40 disabled:text-neutral-60 disabled:pointer-events-none transition-all ${
+                                className={`text-m disabled:bg-neutral-30 disabled:border-neutral-40 disabled:text-neutral-60 rounded-2xl border px-3 py-1 transition-all disabled:pointer-events-none ${
                                   field.value === level
                                     ? level === "Mandatory"
                                       ? "text-primary-main border-primary-main"
                                       : level === "Optional"
-                                      ? "text-primary-main border-primary-main"
-                                      : "text-primary-main border-primary-main"
+                                        ? "text-primary-main border-primary-main"
+                                        : "text-primary-main border-primary-main"
                                     : "bg-neutral-10 text-neutral-90"
                                 }`}
                               >
                                 {level}
                               </button>
-                            )
+                            ),
                           )}
                         </div>
                       )}
@@ -408,7 +408,7 @@ const CreateJobForm = () => {
                   </div>
 
                   {/* Separator */}
-                  <div className="w-full h-px bg-neutral-40" />
+                  <div className="bg-neutral-40 h-px w-full" />
                 </div>
               ))}
             </div>
@@ -419,7 +419,7 @@ const CreateJobForm = () => {
         <div
           // @ts-expect-error ignore for now
           onSubmit={form.handleSubmit(onSubmit)}
-          className="sticky z-50 bottom-0 left-0 w-full flex justify-end p-6 border-t gap-y-2 gap-x-2 bg-neutral-10 border-neutral-40"
+          className="bg-neutral-10 border-neutral-40 sticky bottom-0 left-0 z-50 flex w-full justify-end gap-x-2 gap-y-2 border-t p-6"
         >
           <Button
             type="button"

@@ -162,7 +162,7 @@
   }
 
   .max-w-container {
-    @apply max-w-[1440px] w-full mx-auto;
+    @apply mx-auto w-full max-w-[1440px];
   }
 }
 

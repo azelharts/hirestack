@@ -69,7 +69,7 @@ const JobList = () => {
 
   const handleStatusChange = (
     jobId: string,
-    newStatus: "active" | "inactive"
+    newStatus: "active" | "inactive",
   ) => {
     updateMutation.mutate(
       {
@@ -94,20 +94,20 @@ const JobList = () => {
             />
           ));
         },
-      }
+      },
     );
   };
 
   const filteredJobs = jobs.filter(
     (job) =>
       job.job_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.job_description.toLowerCase().includes(searchQuery.toLowerCase())
+      job.job_description.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
     <>
-      <div className="pt-20 pb-4 px-6 max-w-container flex-1 flex flex-col">
-        <div className="flex flex-1 gap-x-6 relative">
+      <div className="max-w-container flex flex-1 flex-col px-6 pt-20 pb-4">
+        <div className="relative flex flex-1 gap-x-6">
           {/* Left */}
           <div className="flex flex-1 flex-col gap-y-2">
             {/* Search */}
@@ -116,19 +116,19 @@ const JobList = () => {
               placeholder="Search by job details"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full relative flex items-center"
+              className="relative flex w-full items-center"
               rightIcon={
-                <MagnifyingGlassIcon className="w-6 h-6 text-primary-main" />
+                <MagnifyingGlassIcon className="text-primary-main h-6 w-6" />
               }
             />
 
             {/* Empty job list */}
             {isLoading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main" />
+                <div className="border-primary-main h-12 w-12 animate-spin rounded-full border-b-2" />
               </div>
             ) : filteredJobs.length === 0 ? (
-              <div className="flex flex-col flex-1 items-center justify-center gap-y-4">
+              <div className="flex flex-1 flex-col items-center justify-center gap-y-4">
                 <Image
                   src="/assets/images/empty-job.svg"
                   alt=""
@@ -136,7 +136,7 @@ const JobList = () => {
                   height={300}
                   priority
                 />
-                <div className="flex flex-col items-center gap-y-1 text-neutral-90">
+                <div className="text-neutral-90 flex flex-col items-center gap-y-1">
                   <p className="heading-s-bold">No job opening available</p>
                   <p className="text-l">
                     Create a job opening now and start the candidate process.
@@ -154,38 +154,38 @@ const JobList = () => {
                 {filteredJobs.map((job) => (
                   <div
                     key={job.id}
-                    className="p-6 flex flex-col gap-y-3 rounded-xl shadow-modal"
+                    className="shadow-modal flex flex-col gap-y-3 rounded-xl p-6"
                   >
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center justify-between">
                       <div className="flex gap-x-4">
                         <Tag
                           variant={
                             job.status === "active"
                               ? "success"
                               : job.status === "draft"
-                              ? "secondary"
-                              : "danger"
+                                ? "secondary"
+                                : "danger"
                           }
                           size="medium"
                           className="font-bold capitalize"
                         >
                           {job.status}
                         </Tag>
-                        <div className="rounded-sm border py-1 px-4 border-neutral-40 text-m text-neutral-90">
+                        <div className="border-neutral-40 text-m text-neutral-90 rounded-sm border px-4 py-1">
                           Started on {formatDate(job.created_at)}
                         </div>
                       </div>
 
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <button className="p-1 hover:bg-neutral-20 rounded-lg transition-colors border border-neutral-40 focus:outline-none active:outline-none">
-                            <EllipsisVerticalIcon className="w-4 h-4 text-neutral-70" />
+                          <button className="hover:bg-neutral-20 border-neutral-40 rounded-lg border p-1 transition-colors focus:outline-none active:outline-none">
+                            <EllipsisVerticalIcon className="text-neutral-70 h-4 w-4" />
                           </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
                           <DropdownMenuItem asChild>
-                            <button className="flex items-center gap-x-2 pointer-events-none cursor-not-allowed bg-neutral-30 text-neutral-60 w-full">
-                              <PencilIcon className="w-4 h-4 text-neutral-60" />
+                            <button className="bg-neutral-30 text-neutral-60 pointer-events-none flex w-full cursor-not-allowed items-center gap-x-2">
+                              <PencilIcon className="text-neutral-60 h-4 w-4" />
                               Edit Job
                             </button>
                           </DropdownMenuItem>
@@ -195,7 +195,7 @@ const JobList = () => {
                                 handleStatusChange(job.id, "inactive")
                               }
                             >
-                              <NoSymbolIcon className="w-4 h-4" />
+                              <NoSymbolIcon className="h-4 w-4" />
                               Deactivate Job
                             </DropdownMenuItem>
                           ) : (
@@ -212,7 +212,7 @@ const JobList = () => {
                             onClick={() => handleDelete(job.id)}
                             className="text-danger-main focus:text-danger-main"
                           >
-                            <TrashIcon className="w-4 h-4 text-danger-main" />
+                            <TrashIcon className="text-danger-main h-4 w-4" />
                             Delete Job
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -242,7 +242,7 @@ const JobList = () => {
           </div>
 
           {/* Right */}
-          <div className="flex flex-col gap-y-6 rounded-2xl w-[300px] p-6 sticky top-20 h-fit overflow-hidden">
+          <div className="sticky top-20 flex h-fit w-[300px] flex-col gap-y-6 overflow-hidden rounded-2xl p-6">
             <p className="text-xl-bold text-neutral-40">
               Recruit the best candidates
             </p>
@@ -262,7 +262,7 @@ const JobList = () => {
               alt=""
               fill
               priority
-              className="object-cover brightness-25 -z-50"
+              className="-z-50 object-cover brightness-25"
             />
           </div>
         </div>

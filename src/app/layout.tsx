@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <ReactQueryClientProvider>
       <html lang="en">
-        <body className={`${nunitoSans.className} antialiased !dark`}>
+        <body className={`${nunitoSans.className} !dark antialiased`}>
           {children}
           <Toaster position="bottom-left" closeButton richColors expand />
         </body>

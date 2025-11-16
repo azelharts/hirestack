@@ -88,7 +88,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
 
   const formatValue = (
     value?: string,
-    columnId?: keyof Application
+    columnId?: keyof Application,
   ): React.ReactNode => {
     if (value) {
       if (columnId === "applied_at") return formatDate(value);
@@ -143,11 +143,11 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
       const newWidth = Math.max(100, startWidthRef.current + delta);
       setColumns((prev) =>
         prev.map((c) =>
-          c.id === resizingColumn ? { ...c, width: newWidth } : c
-        )
+          c.id === resizingColumn ? { ...c, width: newWidth } : c,
+        ),
       );
     },
-    [resizingColumn]
+    [resizingColumn],
   );
 
   const handleResizeEnd = () => setResizingColumn(null);
@@ -233,7 +233,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
     return (
       <div
         ref={dropdownRef}
-        className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[200px]"
+        className="absolute top-full right-0 z-50 mt-1 min-w-[200px] rounded-lg border border-gray-200 bg-white shadow-lg"
       >
         {columnId === "phone_number" && (
           <div className="p-2">
@@ -243,7 +243,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 phoneFilter === "all"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -259,7 +259,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                   setPage(1);
                   setActiveFilter(null);
                 }}
-                className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+                className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                   phoneFilter === code.value
                     ? "bg-primary-surface text-primary-main"
                     : ""
@@ -279,7 +279,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 genderFilter === "all"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -293,7 +293,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 genderFilter === "male"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -307,7 +307,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 genderFilter === "female"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -319,14 +319,14 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
         )}
 
         {columnId === "domicile" && (
-          <div className="p-2 max-h-[300px] overflow-y-auto">
+          <div className="max-h-[300px] overflow-y-auto p-2">
             <button
               onClick={() => {
                 setDomicileFilter("all");
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 domicileFilter === "all"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -342,7 +342,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                   setPage(1);
                   setActiveFilter(null);
                 }}
-                className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+                className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                   domicileFilter === city
                     ? "bg-primary-surface text-primary-main"
                     : ""
@@ -362,7 +362,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 dateFilter === "all"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -376,7 +376,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 dateFilter === "24h"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -390,7 +390,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 dateFilter === "1w"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -404,7 +404,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                 setPage(1);
                 setActiveFilter(null);
               }}
-              className={`w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm ${
+              className={`w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 ${
                 dateFilter === "1m"
                   ? "bg-primary-surface text-primary-main"
                   : ""
@@ -423,67 +423,67 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main" />
+        <div className="border-primary-main h-12 w-12 animate-spin rounded-full border-b-2" />
       </div>
     );
   }
 
   return (
-    <div className="pt-20 pb-4 px-6 max-w-container flex-1 flex flex-col">
+    <div className="max-w-container flex flex-1 flex-col px-6 pt-20 pb-4">
       <div className="flex flex-1 flex-col gap-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <p className="text-xl-bold text-neutral-100">Candidate Management</p>
           {activeFilterCount > 0 && (
             <Button
               onClick={clearAllFilters}
               size="medium"
-              className="w-fit flex gap-x-2"
+              className="flex w-fit gap-x-2"
             >
               Clear {activeFilterCount} Filter{activeFilterCount > 1 ? "s" : ""}
-              <XMarkIcon className="w-4 h-4" strokeWidth={2} />
+              <XMarkIcon className="h-4 w-4" strokeWidth={2} />
             </Button>
           )}
         </div>
 
         {data && data.applications.length > 0 ? (
-          <div className="w-full flex-1 flex flex-col rounded-lg border p-6 bg-neutral-10 border-neutral-40">
+          <div className="bg-neutral-10 border-neutral-40 flex w-full flex-1 flex-col rounded-lg border p-6">
             {isLoading ? (
               <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main" />
+                <div className="border-primary-main h-12 w-12 animate-spin rounded-full border-b-2" />
               </div>
             ) : (
               <>
-                <div className="overflow-x-auto flex-1 shadow-modal">
+                <div className="shadow-modal flex-1 overflow-x-auto">
                   <table className="w-full">
-                    <thead className="border-b border-neutral-30">
+                    <thead className="border-neutral-30 border-b">
                       <tr className="bg-[#FCFCFC]">
-                        <th className="pl-4 py-4 flex items-center w-fit">
+                        <th className="flex w-fit items-center py-4 pl-4">
                           <input
                             type="checkbox"
                             checked={isAllSelected}
                             onChange={(e) => handleSelectAll(e.target.checked)}
-                            className="size-5 rounded-lg accent-primary-main border-primary-main text-primary-main cursor-pointer translate-y-[3px]"
+                            className="accent-primary-main border-primary-main text-primary-main size-5 translate-y-[3px] cursor-pointer rounded-lg"
                           />
                         </th>
                         {columns.map((column) => (
                           <th
                             key={column.id}
                             style={{ width: `${column.width}px` }}
-                            className="relative select-none bg-[#FCFCFC]"
+                            className="relative bg-[#FCFCFC] select-none"
                             draggable
                             onDragStart={(e) => handleDragStart(e, column.id)}
                             onDragOver={(e) => handleDragOver(e, column.id)}
                             onDragEnd={handleDragEnd}
                           >
-                            <div className="flex items-center gap-x-2 justify-between p-4 cursor-move">
+                            <div className="flex cursor-move items-center justify-between gap-x-2 p-4">
                               <div className="flex items-center gap-x-2">
-                                <span className="text-s-bold uppercase text-nowrap text-neutral-100">
+                                <span className="text-s-bold text-nowrap text-neutral-100 uppercase">
                                   {column.label}
                                 </span>
                                 {column.id === "applied_at" && (
                                   <button
                                     onClick={toggleSort}
-                                    className="p-1 hover:bg-gray-100 rounded transition-colors"
+                                    className="rounded p-1 transition-colors hover:bg-gray-100"
                                     title={`Sort ${
                                       sortOrder === "asc"
                                         ? "descending"
@@ -491,9 +491,9 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                                     }`}
                                   >
                                     {sortOrder === "asc" ? (
-                                      <BarsArrowUpIcon className="size-4 text-neutral-90" />
+                                      <BarsArrowUpIcon className="text-neutral-90 size-4" />
                                     ) : (
-                                      <BarsArrowDownIcon className="size-4 text-neutral-90" />
+                                      <BarsArrowDownIcon className="text-neutral-90 size-4" />
                                     )}
                                   </button>
                                 )}
@@ -506,10 +506,10 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                                       setActiveFilter(
                                         activeFilter === column.id
                                           ? null
-                                          : column.id
+                                          : column.id,
                                       )
                                     }
-                                    className={`p-1 rounded transition-colors ${
+                                    className={`rounded p-1 transition-colors ${
                                       (column.id === "phone_number" &&
                                         phoneFilter !== "all") ||
                                       (column.id === "gender" &&
@@ -518,11 +518,11 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                                         domicileFilter !== "all") ||
                                       (column.id === "applied_at" &&
                                         dateFilter !== "all")
-                                        ? "bg-blue-100 text-primary-main"
+                                        ? "text-primary-main bg-blue-100"
                                         : "hover:bg-gray-100"
                                     }`}
                                   >
-                                    <Bars3BottomLeftIcon className="size-4 text-neutral-90" />
+                                    <Bars3BottomLeftIcon className="text-neutral-90 size-4" />
                                   </button>
                                   <FilterDropdown columnId={column.id} />
                                 </div>
@@ -533,7 +533,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                                 onMouseDown={(e) =>
                                   handleResizeStart(e, column.id)
                                 }
-                                className="absolute right-0 top-0 bottom-0 w-1 h-full border-r border-neutral-30 cursor-col-resize hover:bg-primary-main transition-colors"
+                                className="border-neutral-30 hover:bg-primary-main absolute top-0 right-0 bottom-0 h-full w-1 cursor-col-resize border-r transition-colors"
                               />
                             </div>
                           </th>
@@ -555,27 +555,27 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                         applications.map((app) => (
                           <tr
                             key={app.id}
-                            className="hover:bg-gray-50 transition-colors"
+                            className="transition-colors hover:bg-gray-50"
                           >
-                            <td className="flex items-center justify-left p-4">
+                            <td className="justify-left flex items-center p-4">
                               <input
                                 type="checkbox"
                                 checked={selectedIds.has(app.id)}
                                 onChange={(e) =>
                                   handleSelectRow(app.id, e.target.checked)
                                 }
-                                className="size-5 rounded-lg accent-primary-main border-primary-main text-primary-main cursor-pointer"
+                                className="accent-primary-main border-primary-main text-primary-main size-5 cursor-pointer rounded-lg"
                               />
                             </td>
                             {columns.map((column) => (
                               <td
                                 key={column.id}
-                                className="p-4 text-m text-neutral-90 truncate text-nowrap"
+                                className="text-m text-neutral-90 truncate p-4 text-nowrap"
                                 style={{ width: `${column.width}px` }}
                               >
                                 {formatValue(
                                   app[column.id] as string,
-                                  column.id
+                                  column.id,
                                 )}
                               </td>
                             ))}
@@ -588,7 +588,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
 
                 {/* Pagination */}
                 {applications.length > 0 && (
-                  <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
+                  <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-4">
                     <div className="text-sm text-gray-600">
                       Showing {(page - 1) * pageSize + 1} to{" "}
                       {Math.min(page * pageSize, data?.total || 0)} of{" "}
@@ -598,7 +598,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                       <button
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Previous
                       </button>
@@ -608,7 +608,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                             (pageNum) =>
                               pageNum === 1 ||
                               pageNum === totalPages ||
-                              Math.abs(pageNum - page) <= 1
+                              Math.abs(pageNum - page) <= 1,
                           )
                           .map((pageNum, idx, arr) => (
                             <div key={pageNum} className="flex items-center">
@@ -617,7 +617,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                               )}
                               <button
                                 onClick={() => setPage(pageNum)}
-                                className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                                className={`rounded-lg px-4 py-2 text-sm transition-colors ${
                                   page === pageNum
                                     ? "bg-primary-main text-white"
                                     : "border border-gray-300 hover:bg-gray-50"
@@ -633,7 +633,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
                           setPage((p) => Math.min(totalPages, p + 1))
                         }
                         disabled={page === totalPages}
-                        className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Next
                       </button>
@@ -644,7 +644,7 @@ export default function CandidateManagement({ jobId }: { jobId: string }) {
             )}
           </div>
         ) : (
-          <div className="flex w-full h-full items-center justify-center flex-col flex-1 gap-y-6">
+          <div className="flex h-full w-full flex-1 flex-col items-center justify-center gap-y-6">
             <Image
               src="/assets/images/empty-applicants.svg"
               alt=""

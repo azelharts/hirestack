@@ -26,7 +26,7 @@ const inputVariants = cva(
     defaultVariants: {
       state: "default",
     },
-  }
+  },
 );
 
 interface TextFieldProps
@@ -58,7 +58,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       type,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = type === "password";
@@ -74,16 +74,16 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 
         <div className={cn(inputVariants({ state }), className)}>
           {leftIcon && (
-            <span className="absolute left-3 text-neutral-60">{leftIcon}</span>
+            <span className="text-neutral-60 absolute left-3">{leftIcon}</span>
           )}
           <input
             ref={ref}
             type={inputType}
-            className="flex-1 outline-none placeholder:text-neutral-60 text-m text-neutral-90"
+            className="placeholder:text-neutral-60 text-m text-neutral-90 flex-1 outline-none"
             {...props}
           />
           {rightIcon && (
-            <span className="absolute right-3 text-neutral-60">
+            <span className="text-neutral-60 absolute right-3">
               {rightIcon}
             </span>
           )}
@@ -96,9 +96,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
               tabIndex={-1}
             >
               {showPassword ? (
-                <EyeIcon className="w-4 h-4 text-neutral-100 stroke-2" />
+                <EyeIcon className="h-4 w-4 stroke-2 text-neutral-100" />
               ) : (
-                <EyeSlashIcon className="w-4 h-4 text-neutral-100 stroke-2" />
+                <EyeSlashIcon className="h-4 w-4 stroke-2 text-neutral-100" />
               )}
             </button>
           )}
@@ -106,27 +106,27 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 
         {/* Messages */}
         {errorMessage && (
-          <div className="flex items-center gap-x-1 text-s text-danger-main">
-            <ExclamationTriangleIcon className="w-4 h-4 stroke-2" />
+          <div className="text-s text-danger-main flex items-center gap-x-1">
+            <ExclamationTriangleIcon className="h-4 w-4 stroke-2" />
             <span>{errorMessage}</span>
           </div>
         )}
         {!errorMessage && successMessage && (
-          <div className="flex items-center gap-x-1 text-s text-success-main">
-            <CheckIcon className="w-4 h-4 stroke-2" />
+          <div className="text-s text-success-main flex items-center gap-x-1">
+            <CheckIcon className="h-4 w-4 stroke-2" />
             <span>{successMessage}</span>
           </div>
         )}
 
         {/* Counter */}
         {showCounter && typeof maxLength === "number" && (
-          <div className="text-right text-xs text-neutral-60">
+          <div className="text-neutral-60 text-right text-xs">
             {valueLength ?? 0}/{maxLength}
           </div>
         )}
       </div>
     );
-  }
+  },
 );
 
 TextField.displayName = "TextField";

@@ -10,7 +10,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <Dialog>
-      <div className="w-full min-h-screen flex flex-col">
+      <div className="flex min-h-screen w-full flex-col">
         <DashboardNavbar />
         <CandidateManagement jobId={jobId} />
       </div>

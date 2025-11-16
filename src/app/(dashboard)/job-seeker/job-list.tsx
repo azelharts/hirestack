@@ -18,7 +18,7 @@ const JobList = () => {
 
   const [searchQuery] = useState("");
   const [selectedJobId, setSelectedJobId] = useState<string | null>(
-    searchParams.get("selected-job")
+    searchParams.get("selected-job"),
   );
 
   // Fetch jobs using React Query
@@ -26,14 +26,14 @@ const JobList = () => {
 
   // Fetch selected job details
   const { data: selectedJob, isLoading: loadingDetail } = useJob(
-    selectedJobId || ""
+    selectedJobId || "",
   );
 
   const filteredJobs = jobs.filter(
     (job) =>
       job.job_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.job_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.company_name?.toLowerCase().includes(searchQuery.toLowerCase())
+      job.company_name?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   if (filteredJobs.length > 0 && !selectedJobId && !loading) {
@@ -59,14 +59,14 @@ const JobList = () => {
   };
 
   return (
-    <div className="pt-20 pb-4 px-6 max-w-container flex-1 flex flex-col">
+    <div className="max-w-container flex flex-1 flex-col px-6 pt-20 pb-4">
       {/* Loading State */}
       {loading ? (
-        <div className="flex flex-1 w-full items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main" />
+        <div className="flex w-full flex-1 items-center justify-center">
+          <div className="border-primary-main h-12 w-12 animate-spin rounded-full border-b-2" />
         </div>
       ) : filteredJobs.length === 0 ? (
-        <div className="flex flex-1 flex-col items-center gap-y-4 justify-center">
+        <div className="flex flex-1 flex-col items-center justify-center gap-y-4">
           <Image
             src="/assets/images/empty-job.svg"
             alt="No jobs"
@@ -74,7 +74,7 @@ const JobList = () => {
             height={300}
             priority
           />
-          <div className="flex flex-col gap-y-1 items-center">
+          <div className="flex flex-col items-center gap-y-1">
             <p className="heading-s-bold text-nuetral-90">
               No job openings available
             </p>
@@ -84,9 +84,9 @@ const JobList = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-1 gap-x-6 relative">
+        <div className="relative flex flex-1 gap-x-6">
           {/* Left Side - Job List */}
-          <div className="flex flex-col gap-y-4 min-w-fit max-h-[calc(100vh-100px)] overflow-y-auto pr-4">
+          <div className="flex max-h-[calc(100vh-100px)] min-w-fit flex-col gap-y-4 overflow-y-auto pr-4">
             {filteredJobs.map((job) => (
               <div
                 key={job.id}
@@ -96,7 +96,7 @@ const JobList = () => {
                     scroll: false,
                   });
                 }}
-                className={`w-full min-w-[384px] max-w-[384px] rounded-lg border-2 px-4 py-3 flex flex-col gap-y-2 cursor-pointer transition-all ${
+                className={`flex w-full max-w-[384px] min-w-[384px] cursor-pointer flex-col gap-y-2 rounded-lg border-2 px-4 py-3 transition-all ${
                   selectedJobId === job.id
                     ? "border-primary-hover bg-primary-surface"
                     : "border-neutral-30 bg-neutral-10 hover:border-primary-focus hover:bg-primary-surface"
@@ -109,7 +109,7 @@ const JobList = () => {
                     alt={`${job.company_name} company logo`}
                     width={48}
                     height={48}
-                    className="rounded-sm aspect-square border border-neutral-40"
+                    className="border-neutral-40 aspect-square rounded-sm border"
                   />
                   <div className="flex flex-col">
                     <h3 className="text-l-bold text-neutral-90">
@@ -120,18 +120,18 @@ const JobList = () => {
                 </div>
 
                 {/* Separator */}
-                <div className="w-full h-px dashed-border-2" />
+                <div className="dashed-border-2 h-px w-full" />
 
                 {/* Job Detail */}
                 <div className="flex flex-col gap-y-2">
                   <div className="flex items-center gap-x-1">
-                    <MapPinIcon className="size-4 text-neutral-80" />
+                    <MapPinIcon className="text-neutral-80 size-4" />
                     <span className="text-s text-neutral-80">
                       Jakarta Selatan
                     </span>
                   </div>
                   <div className="flex items-center gap-x-1">
-                    <CreditCardIcon className="size-4 text-neutral-80" />
+                    <CreditCardIcon className="text-neutral-80 size-4" />
                     <span className="text-s text-neutral-80">
                       {formatSalary(job.salary_min, job.salary_max)}
                     </span>
@@ -142,28 +142,28 @@ const JobList = () => {
           </div>
 
           {/* Right Side - Job Detail */}
-          <div className="w-full max-h-[calc(100vh-100px)] rounded-lg border border-neutral-40 overflow-y-auto bg-white">
+          <div className="border-neutral-40 max-h-[calc(100vh-100px)] w-full overflow-y-auto rounded-lg border bg-white">
             {selectedJobId && selectedJobExists ? (
               <div className="p-6">
                 {loadingDetail ? (
                   <div className="flex items-center justify-center py-20">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main" />
+                    <div className="border-primary-main h-12 w-12 animate-spin rounded-full border-b-2" />
                   </div>
                 ) : (
                   selectedJob && (
                     <div className="flex flex-col gap-y-6">
                       {/* existing job detail content stays the same */}
-                      <div className="pb-6 flex justify-between items-start border-b border-neutral-4">
+                      <div className="border-neutral-4 flex items-start justify-between border-b pb-6">
                         <div className="flex items-start gap-x-6">
                           <Image
                             src="/assets/logo-rakamin-icon.png"
                             alt={`${selectedJob.company_name} company logo`}
                             width={48}
                             height={48}
-                            className="rounded-sm aspect-square border border-neutral-40"
+                            className="border-neutral-40 aspect-square rounded-sm border"
                           />
                           <div className="flex flex-col gap-y-2">
-                            <div className="rounded-sm py-0.5 px-2 bg-success-main text-s-bold text-neutral-10 w-fit">
+                            <div className="bg-success-main text-s-bold text-neutral-10 w-fit rounded-sm px-2 py-0.5">
                               {selectedJob.job_type}
                             </div>
                             <div className="flex flex-col">
@@ -194,8 +194,8 @@ const JobList = () => {
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full py-20 px-6 text-center">
-                <BriefcaseIcon className="w-16 h-16 text-neutral-40 mb-4" />
+              <div className="flex h-full flex-col items-center justify-center px-6 py-20 text-center">
+                <BriefcaseIcon className="text-neutral-40 mb-4 h-16 w-16" />
                 <p className="text-l text-neutral-60">
                   Select a job to view details
                 </p>

@@ -36,7 +36,7 @@ export const Tag = React.forwardRef<HTMLDivElement, DivProps>(
         {...props}
       />
     );
-  }
+  },
 );
 
 Tag.displayName = "Tag";

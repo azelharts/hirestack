@@ -15,9 +15,9 @@ export default function ApplyPage({
 
   if (isLoading) {
     return (
-      <div className="max-w-3xl mx-auto px-6 py-12">
+      <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main" />
+          <div className="border-primary-main h-12 w-12 animate-spin rounded-full border-b-2" />
         </div>
       </div>
     );
@@ -29,7 +29,7 @@ export default function ApplyPage({
   }
 
   return (
-    <div className="w-screen h-svh bg-neutral-20 overflow-hidden">
+    <div className="bg-neutral-20 h-svh w-screen overflow-hidden">
       <JobApplicationForm job={job} />
     </div>
   );

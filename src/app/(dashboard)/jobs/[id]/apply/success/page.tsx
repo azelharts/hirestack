@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 const Page = () => {
   const router = useRouter();
   return (
-    <div className="w-screen h-svh flex items-center justify-center bg-neutral-20">
-      <div className="flex flex-col gap-y-4 items-center">
+    <div className="bg-neutral-20 flex h-svh w-screen items-center justify-center">
+      <div className="flex flex-col items-center gap-y-4">
         <Image
           src="/assets/images/application-success.svg"
           alt=""
@@ -16,7 +16,7 @@ const Page = () => {
           height={214}
           className="object-cover"
         />
-        <div className="flex flex-col items-center text-center text-neutral-90">
+        <div className="text-neutral-90 flex flex-col items-center text-center">
           <p className="heading-m-bold">🎉 Your application was sent!</p>
           <p className="text-l max-w-[606px]">
             Congratulations! You&apos;ve taken the first step towards a

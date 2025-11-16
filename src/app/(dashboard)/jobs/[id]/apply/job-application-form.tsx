@@ -55,7 +55,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
   const router = useRouter();
   const [countryCode, setCountryCode] = useState("+62");
   const [photoPreview, setPhotoPreview] = useState<string>(
-    "/assets/images/default-avatar.png"
+    "/assets/images/default-avatar.png",
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -173,7 +173,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
   const dayNames = ["S", "M", "T", "W", "T", "F", "S"];
 
   const filteredCities = indonesianCities.filter((city) =>
-    city.toLowerCase().includes(domicileSearch.toLowerCase())
+    city.toLowerCase().includes(domicileSearch.toLowerCase()),
   );
 
   const getCountryFlag = (code: string) => {
@@ -196,7 +196,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
     return countryCodes.filter(
       (code) =>
         code.country.toLowerCase().includes(search) ||
-        code.value.includes(search)
+        code.value.includes(search),
     );
   }, [countrySearch]);
 
@@ -213,34 +213,34 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
   // Early return if job is not loaded
   if (!job) {
     return (
-      <div className="max-w-3xl mx-auto px-6 py-12">
+      <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="text-center">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-container h-full flex items-center">
+    <div className="max-w-container flex h-full items-center">
       {/* Form */}
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-neutral-10 w-full max-w-[700px] max-h-[calc(100vh-80px)] overflow-y-auto mx-auto no-scrollbar"
+        className="bg-neutral-10 no-scrollbar mx-auto max-h-[calc(100vh-80px)] w-full max-w-[700px] overflow-y-auto"
       >
-        <div className="flex flex-col border p-10 gap-y-6 border-neutral-40">
+        <div className="border-neutral-40 flex flex-col gap-y-6 border p-10">
           {/* Header */}
           <div className="flex items-center gap-x-4">
             <button
               type="button"
               onClick={() => router.back()}
-              className="w-fit rounded-lg border p-1 bg-neutral-10 border-neutral-40 shadow-button"
+              className="bg-neutral-10 border-neutral-40 shadow-button w-fit rounded-lg border p-1"
             >
               <ArrowLeftIcon
                 className="size-4 text-[#333333]"
                 strokeWidth={3}
               />
             </button>
-            <div className="flex flex-1 gap-x-4 items-center justify-between max-w-full">
-              <p className="text-xl-bold text-neutral-100 flex-1 truncate">
+            <div className="flex max-w-full flex-1 items-center justify-between gap-x-4">
+              <p className="text-xl-bold flex-1 truncate text-neutral-100">
                 Apply {job.job_name} at {job.company_name}
               </p>
               <span className="text-m text-neutral-90 shrink-0 text-end">
@@ -262,7 +262,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                     <FieldLabel htmlFor="photo-url" className="font-bold">
                       Photo Profile
                       {isFieldRequired(job.req_photo_profile) && (
-                        <span className="text-danger-main -translate-x-2 ">
+                        <span className="text-danger-main -translate-x-2">
                           *
                         </span>
                       )}
@@ -272,9 +272,9 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                       alt="Profile preview"
                       width={128}
                       height={128}
-                      className="rounded-full w-32 h-32 max-w-32 max-h-32 aspect-square object-cover"
+                      className="aspect-square h-32 max-h-32 w-32 max-w-32 rounded-full object-cover"
                     />
-                    <div className="flex-1 relative">
+                    <div className="relative flex-1">
                       <input
                         type="file"
                         id="photo-url"
@@ -292,7 +292,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                         type="button"
                         variant="neutral"
                         size="medium"
-                        className="w-fit flex items-center gap-x-1"
+                        className="flex w-fit items-center gap-x-1"
                         onClick={() =>
                           document.getElementById("photo-url")?.click()
                         }
@@ -356,7 +356,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                     <FieldLabel htmlFor="dob">
                       Date of Birth
                       {isFieldRequired(job.req_date_of_birth) && (
-                        <span className="text-danger-main -translate-x-2 ">
+                        <span className="text-danger-main -translate-x-2">
                           *
                         </span>
                       )}
@@ -365,11 +365,11 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                       <PopoverTrigger asChild>
                         <button
                           type="button"
-                          className={`w-full px-3 py-2 border-2 border-neutral-40 hover:border-primary-focus transition-colors invalid:border-danger-main focus:border-primary-main rounded-lg text-left text-m flex items-center justify-between ${
+                          className={`border-neutral-40 hover:border-primary-focus invalid:border-danger-main focus:border-primary-main text-m flex w-full items-center justify-between rounded-lg border-2 px-3 py-2 text-left transition-colors ${
                             selectedDate ? "text-black" : "text-neutral-60"
                           }`}
                         >
-                          <div className="flex gap-x-3 items-center">
+                          <div className="flex items-center gap-x-3">
                             <CalendarDaysIcon className="size-4 text-neutral-100" />
                             {selectedDate
                               ? selectedDate.toLocaleDateString("en-GB", {
@@ -382,14 +382,14 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                           <ChevronDownIcon className="size-2.5 text-neutral-100" />
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-fit rounded-2xl border p-6 bg-neutral-10 border-neutral-40 shadow-modal -translate-x-24 flex flex-col gap-y-6">
+                      <PopoverContent className="bg-neutral-10 border-neutral-40 shadow-modal flex w-fit -translate-x-24 flex-col gap-y-6 rounded-2xl border p-6">
                         {/* Navigation */}
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-x-1">
                             <button
                               type="button"
                               onClick={() => setCurrentYear(currentYear - 1)}
-                              className="size-6 flex items-center justify-center hover:bg-neutral-20"
+                              className="hover:bg-neutral-20 flex size-6 items-center justify-center"
                             >
                               <ChevronsLeft
                                 className="size-3 text-neutral-100"
@@ -406,7 +406,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                                   setCurrentMonth(currentMonth - 1);
                                 }
                               }}
-                              className="size-6 flex items-center justify-center hover:bg-neutral-20"
+                              className="hover:bg-neutral-20 flex size-6 items-center justify-center"
                             >
                               <ChevronLeft
                                 className="size-3 text-neutral-100"
@@ -414,7 +414,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                               />
                             </button>
                           </div>
-                          <div className="text-m-bold text-center min-w-[140px]">
+                          <div className="text-m-bold min-w-[140px] text-center">
                             {monthNames[currentMonth].substring(0, 3)}{" "}
                             {currentYear}
                           </div>
@@ -428,7 +428,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                                 setCurrentMonth(currentMonth + 1);
                               }
                             }}
-                            className="size-6 flex items-center justify-center hover:bg-neutral-20"
+                            className="hover:bg-neutral-20 flex size-6 items-center justify-center"
                           >
                             <ChevronRight
                               className="size-3 text-neutral-100"
@@ -438,7 +438,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                           <button
                             type="button"
                             onClick={() => setCurrentYear(currentYear + 1)}
-                            className="size-6 flex items-center justify-center hover:bg-neutral-20"
+                            className="hover:bg-neutral-20 flex size-6 items-center justify-center"
                           >
                             <ChevronsRight
                               className="size-3 text-neutral-100"
@@ -448,22 +448,22 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                         </div>
                         <div className="flex flex-col">
                           {/* Day names */}
-                          <div className="grid grid-cols-7 gap-x-2 items-center justify-center">
+                          <div className="grid grid-cols-7 items-center justify-center gap-x-2">
                             {dayNames.map((day, idx) => (
                               <div
                                 key={idx}
-                                className="w-10 text-center text-m-bold text-neutral-100"
+                                className="text-m-bold w-10 text-center text-neutral-100"
                               >
                                 {day}
                               </div>
                             ))}
                           </div>
                           {/* Calendar days */}
-                          <div className="grid grid-cols-7 gap-x-2 gap-y-2 items-center justify-center">
+                          <div className="grid grid-cols-7 items-center justify-center gap-x-2 gap-y-2">
                             {Array.from({
                               length: getFirstDayOfMonth(
                                 currentMonth,
-                                currentYear
+                                currentYear,
                               ),
                             }).map((_, i) => (
                               <div key={`empty-${i}`} />
@@ -475,7 +475,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                               const date = new Date(
                                 currentYear,
                                 currentMonth,
-                                day
+                                day,
                               );
                               const isSelected =
                                 selectedDate?.toDateString() ===
@@ -487,12 +487,12 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                                   onClick={() => {
                                     setSelectedDate(date);
                                     field.onChange(
-                                      date.toISOString().split("T")[0]
+                                      date.toISOString().split("T")[0],
                                     );
                                   }}
                                   className={`text-m text-neutral-90 hover:not-focus:bg-primary-surface h-6 transition-colors ${
                                     isSelected
-                                      ? "bg-primary-main text-white hover:bg-primary-hover"
+                                      ? "bg-primary-main hover:bg-primary-hover text-white"
                                       : ""
                                   }`}
                                 >
@@ -533,14 +533,14 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                       {genderOptions.map((option) => (
                         <label
                           key={option.value}
-                          className="flex items-center gap-x-2 cursor-pointer"
+                          className="flex cursor-pointer items-center gap-x-2"
                         >
                           <input
                             type="radio"
                             value={option.value}
                             checked={field.value === option.value}
                             onChange={(e) => field.onChange(e.target.value)}
-                            className="size-5 accent-primary-main cursor-pointer"
+                            className="accent-primary-main size-5 cursor-pointer"
                           />
                           <span className="text-m text-neutral-90">
                             {option.label === "Male" && "He/him (Male)"}
@@ -592,13 +592,13 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                             className="fixed inset-0 z-40"
                             onClick={() => setIsOpen(false)}
                           />
-                          <div className="absolute z-50 mt-1 w-full rounded-lg border bg-neutral-10 shadow-modal ">
+                          <div className="bg-neutral-10 shadow-modal absolute z-50 mt-1 w-full rounded-lg border">
                             <div className="max-h-[268px] overflow-y-auto py-2">
                               {filteredCities.length > 0 ? (
                                 filteredCities.map((city) => (
                                   <div
                                     key={city}
-                                    className="cursor-pointer rounded-sm py-2 px-4 text-s-bold hover:bg-accent"
+                                    className="text-s-bold hover:bg-accent cursor-pointer rounded-sm px-4 py-2"
                                     onClick={() => {
                                       field.onChange(city);
                                       setDomicileSearch(city);
@@ -609,7 +609,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                                   </div>
                                 ))
                               ) : (
-                                <div className="text-center text-s text-neutral-60">
+                                <div className="text-s text-neutral-60 text-center">
                                   No city found
                                 </div>
                               )}
@@ -643,7 +643,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                         </span>
                       )}
                     </FieldLabel>
-                    <div className="flex gap-x-2 items-center border-2 border-neutral-40 hover:border-primary-focus rounded-lg px-3">
+                    <div className="border-neutral-40 hover:border-primary-focus flex items-center gap-x-2 rounded-lg border-2 px-3">
                       <Select
                         value={countryCode}
                         onValueChange={(value) => {
@@ -653,7 +653,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                       >
                         <SelectTrigger
                           iconClass="size-3"
-                          className="border-none w-auto p-0 max-h-10 focus:ring-0 text-xl gap-x-1"
+                          className="max-h-10 w-auto gap-x-1 border-none p-0 text-xl focus:ring-0"
                         >
                           <SelectValue>
                             {getCountryFlag(countryCode)}
@@ -661,7 +661,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                         </SelectTrigger>
                         <SelectContent className="w-[346px] max-w-[346px] translate-x-34">
                           <div
-                            className="px-2 pb-2 sticky top-0 bg-popover"
+                            className="bg-popover sticky top-0 px-2 pb-2"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <Input
@@ -673,7 +673,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                               className="h-9"
                             />
                           </div>
-                          <div className="min-h-fit max-h-[260px] overflow-y-auto">
+                          <div className="max-h-[260px] min-h-fit overflow-y-auto">
                             {filteredCountries.length > 0 ? (
                               filteredCountries.map((code) => (
                                 <SelectItem key={code.value} value={code.value}>
@@ -681,7 +681,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                                     <span className="text-xl">
                                       {getCountryFlag(code.value)}
                                     </span>
-                                    <span className="font-medium flex-1">
+                                    <span className="flex-1 font-medium">
                                       {code.country}
                                     </span>
                                     <span className="text-neutral-60">
@@ -691,14 +691,14 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                                 </SelectItem>
                               ))
                             ) : (
-                              <div className="px-2 py-6 text-center text-sm text-neutral-60">
+                              <div className="text-neutral-60 px-2 py-6 text-center text-sm">
                                 No country found
                               </div>
                             )}
                           </div>
                         </SelectContent>
                       </Select>
-                      <div className="w-px h-6 bg-neutral-40" />
+                      <div className="bg-neutral-40 h-6 w-px" />
                       <span className="text-m text-neutral-90">
                         {countryCode}
                       </span>
@@ -709,7 +709,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                         type="tel"
                         aria-invalid={fieldState.invalid}
                         placeholder="81XXXXXXXXX"
-                        className="flex-1 border-none focus:ring-0 p-0"
+                        className="flex-1 border-none p-0 focus:ring-0"
                       />
                     </div>
                     {fieldState.invalid && (
@@ -732,7 +732,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                     <FieldLabel htmlFor="email">
                       Email
                       {isFieldRequired(job.req_email) && (
-                        <span className="text-danger-main -translate-x-2 ">
+                        <span className="text-danger-main -translate-x-2">
                           *
                         </span>
                       )}
@@ -765,7 +765,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                     <FieldLabel htmlFor="linkedin">
                       LinkedIn Profile
                       {isFieldRequired(job.req_linkedin_link) && (
-                        <span className="text-danger-main -translate-x-2 ">
+                        <span className="text-danger-main -translate-x-2">
                           *
                         </span>
                       )}
@@ -783,7 +783,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
                     />
                     {isLinkedInValid && (
                       <p className="text-s text-primary-main flex items-center gap-x-1">
-                        <CheckCircleIcon className="size-4 text-primary-main" />{" "}
+                        <CheckCircleIcon className="text-primary-main size-4" />{" "}
                         URL address found
                       </p>
                     )}
@@ -798,7 +798,7 @@ const JobApplicationForm = ({ job }: JobApplicationFormProps) => {
         </div>
 
         {/* Submit Button */}
-        <div className="sticky bottom-0 w-full py-6 px-10 bg-neutral-10 border-t border-neutral-40">
+        <div className="bg-neutral-10 border-neutral-40 sticky bottom-0 w-full border-t px-10 py-6">
           <Button
             type="submit"
             variant={form.formState.isValid ? "primary" : "disabled"}

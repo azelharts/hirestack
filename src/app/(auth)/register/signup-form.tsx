@@ -56,7 +56,7 @@ const SignUpForm = () => {
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
     router.push(
-      `/confirm?email=${encodeURIComponent(result.data?.user?.email || "")}`
+      `/confirm?email=${encodeURIComponent(result.data?.user?.email || "")}`,
     );
   };
 
@@ -68,16 +68,16 @@ const SignUpForm = () => {
           alt="logo rakamin"
           width={145}
           height={50}
-          className="w-[145px] h-[50px] object-cover"
+          className="h-[50px] w-[145px] object-cover"
           priority
         />
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-[500px] p-10 flex flex-col gap-y-4 bg-neutral-10 shadow-modal"
+          className="bg-neutral-10 shadow-modal flex w-[500px] flex-col gap-y-4 p-10"
         >
           <div className="flex flex-col gap-y-2">
-            <p className="font-bold text-xl leading-[30px] text-neutral-90">
+            <p className="text-neutral-90 text-xl leading-[30px] font-bold">
               Bergabung dengan Rakamin
             </p>
             <p className="text-m">
@@ -108,10 +108,10 @@ const SignUpForm = () => {
               errors.password
                 ? "error"
                 : loading
-                ? "disabled"
-                : passwordValue
-                ? "success"
-                : "default"
+                  ? "disabled"
+                  : passwordValue
+                    ? "success"
+                    : "default"
             }
             errorMessage={errors.email?.message}
             successMessage={
@@ -131,10 +131,10 @@ const SignUpForm = () => {
               errors.password
                 ? "error"
                 : loading
-                ? "disabled"
-                : passwordValue
-                ? "success"
-                : "default"
+                  ? "disabled"
+                  : passwordValue
+                    ? "success"
+                    : "default"
             }
             errorMessage={errors.password?.message}
           />
@@ -151,9 +151,9 @@ const SignUpForm = () => {
           </Button>
 
           <div className="flex items-center gap-x-3">
-            <div className="h-px bg-neutral-60 grow" />
-            <span className="text-xs leading-[18px] text-neutral-60">atau</span>
-            <div className="h-px bg-neutral-60 grow" />
+            <div className="bg-neutral-60 h-px grow" />
+            <span className="text-neutral-60 text-xs leading-[18px]">atau</span>
+            <div className="bg-neutral-60 h-px grow" />
           </div>
 
           <Button

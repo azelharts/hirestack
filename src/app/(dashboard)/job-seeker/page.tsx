@@ -30,7 +30,7 @@ const page = async () => {
   return (
     <Suspense>
       <Dialog>
-        <div className="w-full min-h-screen flex flex-col">
+        <div className="flex min-h-screen w-full flex-col">
           <DashboardNavbar />
           <JobList />
         </div>
